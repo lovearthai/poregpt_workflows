@@ -71,8 +71,8 @@ wandb_project="DNA_basecalling"
 wandb_run_name="${model_name}_${head_type}_${pre_head_type}_${feature_source}_unfreeze${unfreeze_last_n_layers}_bsz${batch_size}_nnodes${NNODES}_rank${NODE_RANK}"
 
 base_model="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${model_name}/base"
-data_root="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${model_name}/basecall_subset2"
-outdir="log2/${model_name}/${wandb_run_name}"
+data_root="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${model_name}/basecall_subset20"
+outdir="log/${model_name}/${wandb_run_name}"
 
 mkdir -p "${outdir}"
 
