@@ -209,3 +209,52 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ========================
+# 日志文件 (Logs)
+# ========================
+# 忽略所有 .log 后缀的文件
+*.log
+
+# 忽略 logs 目录及其下的所有内容
+logs/
+log/
+
+# 忽略常见的事件日志文件 (如 TensorFlow 产生的)
+events.out.tfevents.*
+
+# ========================
+# Weights & Biases (wandb)
+# ========================
+# 忽略 wandb 运行产生的所有文件和目录
+wandb/
+wandb-run-*
+wandb-summary.json
+
+
+# ========================
+# 1. 日志文件 (Logs) - 全局匹配
+# ========================
+# 忽略任何目录下所有 .log 后缀的文件
+**/*.log
+
+# 忽略任何目录下的 logs 文件夹及其内容
+**/logs/
+
+# 忽略任何目录下的 log 文件夹及其内容
+**/log/
+
+# 忽略 TensorFlow 等产生的事件日志
+**/events.out.tfevents.*
+
+# ========================
+# 2. Weights & Biases (wandb) - 全局匹配
+# ========================
+# 忽略任何目录下生成的 wandb 文件夹
+**/wandb/
+
+# 忽略任何目录下生成的 wandb 运行文件
+**/wandb-run-*
+
+# 忽略 wandb 汇总文件
+**/wandb-summary.json
