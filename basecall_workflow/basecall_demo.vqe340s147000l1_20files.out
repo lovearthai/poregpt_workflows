@@ -1,0 +1,97 @@
+========== DISTRIBUTED ENV ==========
+HOSTNAME=iZ1pp00jtt6ypzk7r2vq8dZ
+MASTER_ADDR=127.0.0.1
+MASTER_PORT=29500
+NNODES=1
+NODE_RANK=0
+NPROC_PER_NODE=4
+WORLD_SIZE(env)=<unset>
+RANK(env)=<unset>
+POD_RANK(env)=<unset>
+CUDA_VISIBLE_DEVICES=<unset>
+=====================================
+Python-side env check:
+MASTER_ADDR = None
+MASTER_PORT = None
+WORLD_SIZE = None
+RANK = None
+POD_RANK = None
+LOCAL_RANK = None
+torch.cuda.device_count = 4
+device 0: NVIDIA A40
+device 1: NVIDIA A40
+device 2: NVIDIA A40
+device 3: NVIDIA A40
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 187, in _run_module_as_main
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 187, in _run_module_as_main
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 187, in _run_module_as_main
+    mod_name, mod_spec, code = _get_module_details(mod_name, _Error)
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 110, in _get_module_details
+    mod_name, mod_spec, code = _get_module_details(mod_name, _Error)
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 110, in _get_module_details
+    __import__(pkg_name)
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/__init__.py", line 11, in <module>
+    mod_name, mod_spec, code = _get_module_details(mod_name, _Error)
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 110, in _get_module_details
+    __import__(pkg_name)
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/__init__.py", line 11, in <module>
+    __import__(pkg_name)
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/__init__.py", line 11, in <module>
+    from .model import BasecallModel
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/model.py", line 6, in <module>
+    from .model import BasecallModel
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/model.py", line 6, in <module>
+    from .model import BasecallModel
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/model.py", line 6, in <module>
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 187, in _run_module_as_main
+    mod_name, mod_spec, code = _get_module_details(mod_name, _Error)
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/runpy.py", line 110, in _get_module_details
+    __import__(pkg_name)
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/__init__.py", line 11, in <module>
+    from transformers import AutoTokenizer, AutoModel, AutoConfig
+ModuleNotFoundError: No module named 'transformers'    
+from transformers import AutoTokenizer, AutoModel, AutoConfig
+    from transformers import AutoTokenizer, AutoModel, AutoConfigModuleNotFoundError
+: No module named 'transformers'
+ModuleNotFoundError: No module named 'transformers'
+    from .model import BasecallModel
+  File "/mnt/si003067jezr/default/poregpt/poregpt/poregpt/basecall/model.py", line 6, in <module>
+    from transformers import AutoTokenizer, AutoModel, AutoConfig
+ModuleNotFoundError: No module named 'transformers'
+W0421 17:35:46.658000 2247701 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 2247711 closing signal SIGTERM
+W0421 17:35:46.659000 2247701 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 2247713 closing signal SIGTERM
+W0421 17:35:46.659000 2247701 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 2247714 closing signal SIGTERM
+E0421 17:35:46.722000 2247701 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 2247712) of binary: /opt/miniconda3/envs/bonito_py310/bin/python
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/bonito_py310/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/opt/miniconda3/envs/bonito_py310/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+poregpt.basecall.train_ddp_multifolder FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-04-21_17:35:46
+  host      : iZ1pp00jtt6ypzk7r2vq8dZ
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 2247712)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
