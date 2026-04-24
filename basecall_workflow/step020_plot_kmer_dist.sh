@@ -2,8 +2,8 @@
 
 # --- 参数配置 ---
 K_VAL=11
-INPUT_CSV="step010_count_kmer_dist/kmer${K_VAL}_dist.csv"
-INPUT_CSV="step010_count_kmer_dist/basecall_kmer9_t9000_r0.3_kmer9_dist.csv"
+INPUT_CSV="step010_count_kmer_dist/basecall_kmer${K_VAL}_dist.csv"
+#INPUT_CSV="step010_count_kmer_dist/basecall_kmer9_t9000_r0.3_kmer9_dist.csv"
 PARENT_DIR="step020_plot_kmer_dist"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 FINAL_OUT_DIR="${PARENT_DIR}/run_${TIMESTAMP}"
@@ -22,7 +22,6 @@ python3 scripts/step020_plot_kmer_dist.py \
     --input "$INPUT_CSV" \
     --k $K_VAL \
     --output_dir "$FINAL_OUT_DIR" \
-    #--plot_spectrum \
 
 # 4. 检查结果
 if [ $? -eq 0 ]; then
