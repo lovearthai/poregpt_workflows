@@ -52,14 +52,14 @@ NPROC_PER_NODE="${NPROC_PER_NODE:-4}"
 # 4) 任务参数
 # =========================
 model_name="HF_150m_DNA595G_RSQ542_C625_CNN12_V340S147000"
-batch_size=256
+batch_size=64
 num_epochs=500
 lr="1e-3"
 weight_decay="1e-4"
 warmup_ratio="0.4"
 min_lr="1e-5"
 hidden_layer=-1
-unfreeze_last_n_layers=0
+unfreeze_last_n_layers=4
 head_type="ctc"
 train_decode="ctc_viterbi"
 pre_head_type="none"
@@ -68,7 +68,7 @@ head_output_activation="tanh"
 head_output_scale=5
 
 wandb_project="DNA_basecalling"
-wandb_run_name="${model_name}_${head_type}_${pre_head_type}_${feature_source}_unfreeze${unfreeze_last_n_layers}_bsz${batch_size}_nnodes${NNODES}_rank${NODE_RANK}"
+wandb_run_name="${model_name}_${head_type}_${pre_head_type}_${feature_source}_unfreeze${unfreeze_last_n_layers}_bsz${batch_size}_nnodes${NNODES}_rank${NODE_RANK}_test20_a40"
 
 base_model="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${model_name}/base"
 data_root="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${model_name}/basecall_subset20"

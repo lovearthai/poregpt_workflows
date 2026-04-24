@@ -182,6 +182,12 @@ cython_debug/
 # Learn more at https://abstra.io/docs
 .abstra/
 
+# 忽略所有子目录下的 png 文件
+**/*.png
+
+# 忽略所有子目录下的 csv 文件
+**/*.csv
+**/*.out
 .csv
 .png
 .out 
