@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- 参数配置 ---
-KMER_LEN=13
+KMER_LEN=11
 THREADS=$(nproc)
 THREADS=32
 # 示例2
