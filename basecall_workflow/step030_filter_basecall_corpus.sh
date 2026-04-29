@@ -14,7 +14,8 @@ LEAST_REPEAT_N=1000
 RATIO=0.3
 THREADS=$(nproc) # 使用所有核心
 THREADS=32
-OUT_DIR="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${MODEL_NAME}/basecall_kmer${K_VAL}_t${TARGET}_r${RATIO}_least${LEAST_REPEAT_N}"
+EXCLUDE_K=7
+OUT_DIR="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${MODEL_NAME}/basecall_kmer${K_VAL}_t${TARGET}_r${RATIO}_least${LEAST_REPEAT_N}_exclude${EXCLUDE_K}"
 # 1. 创建目录
 mkdir -p "$OUT_DIR"
 
@@ -33,6 +34,7 @@ time python3 scripts/step030_filter_basecall_corpus.py \
     --output "$OUT_DIR" \
     --ratio $RATIO \
     --least_repeat_n $LEAST_REPEAT_N \
+    --exclude_poly_len $EXCLUDE_K \
     --threads $THREADS
 
 if [ $? -eq 0 ]; then
