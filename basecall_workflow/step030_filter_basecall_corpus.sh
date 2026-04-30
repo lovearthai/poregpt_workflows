@@ -1,21 +1,21 @@
 #!/bin/bash
 
-MODEL_NAME="HF_150m_DNA595G_RSQ542_C625_CNN12_V340S147000"
+MODEL_NAME="HF_V340S147000L1_DNA595G_C01K"
 
 # --- 参数设置 ---
 # 你的统计结果 CSV
 STATS_CSV="step010_count_kmer_dist/basecall_kmer9_dist.csv"
 # 原始 jsonl.gz 路径
-INPUT_GLOB="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${MODEL_NAME}/basecall/*.jsonl.gz"
+INPUT_GLOB="/mnt/zzbnew/poregpt/rna_model/${MODEL_NAME}/basecall/dna595g_test/*.jsonl.gz"
 K_VAL=9
 # 每个 kmer 期望收集的数量。建议：对于 9-mer，5000-10000 是个不错的平衡点
-TARGET=9000 
-LEAST_REPEAT_N=1000
-RATIO=0.3
+TARGET=5000 
+LEAST_REPEAT_N=500
+RATIO=0.7
 THREADS=$(nproc) # 使用所有核心
 THREADS=32
 EXCLUDE_K=7
-OUT_DIR="/mnt/zzbnew/rnamodel/model/signalDNAmodel/${MODEL_NAME}/basecall_kmer${K_VAL}_t${TARGET}_r${RATIO}_least${LEAST_REPEAT_N}_exclude${EXCLUDE_K}"
+OUT_DIR="/mnt/zzbnew/poregpt/rna_model/${MODEL_NAME}/basecall/basecall_kmer${K_VAL}_t${TARGET}_r${RATIO}_least${LEAST_REPEAT_N}_exclude${EXCLUDE_K}"
 # 1. 创建目录
 mkdir -p "$OUT_DIR"
 
