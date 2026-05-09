@@ -6,7 +6,11 @@
 # ==========================================
 
 # --- 1. 路径配置 ---
-INPUT_GZ=${1:-"/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.recon1.jsonl.gz"}
+
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
+INPUT_GZ=${1:-"/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.${TOKENIZER_NAME}.aligned.recon1.jsonl.gz"}
 OUTPUT_DIR="step0x13_plot_token_vector_dynamics"
 mkdir -p $OUTPUT_DIR
 
@@ -23,6 +27,9 @@ TOKEN_END=650
 # 每个 Token 对应的信号步长 (stride)，用于计算坐标对齐
 # 你的 VQ 模型通常是 4
 SIGNAL_STRIDE=4
+
+# 🔥 RSQ levels（新增）
+LEVELS="11 11 11 11"
 
 # --- 3. 动力学分析参数 ---
 
@@ -44,13 +51,14 @@ echo "输入文件:    $INPUT_GZ"
 echo "目标行号:    $LINE_ID"
 echo "Token 范围:  $TOKEN_START 到 $TOKEN_END (Stride: $SIGNAL_STRIDE)"
 echo "窗口配置:    Size=$WIN_SIZE, Stride=$WIN_STRIDE"
+echo "RSQ Levels: $LEVELS"
 echo "------------------------------------------------"
 
 # 统计执行耗时
 start_time=$(date +%s)
 
 # 注意：这里调用的参数名已更新，以匹配最新的 Python 脚本
-python3 step0x13_plot_token_vector_dynamics.py \
+python3 scripts/step0x13_plot_token_vector_dynamics.py \
     --input-file "$INPUT_GZ" \
     --output-file "$OUTPUT_PNG" \
     --line-id $LINE_ID \
@@ -58,7 +66,8 @@ python3 step0x13_plot_token_vector_dynamics.py \
     --token-end $TOKEN_END \
     --signal-stride $SIGNAL_STRIDE \
     --window-size $WIN_SIZE \
-    --window-stride $WIN_STRIDE
+    --window-stride $WIN_STRIDE \
+     --levels $LEVELS
 
 # --- 6. 检查结果 ---
 

@@ -2,10 +2,18 @@
 
 # 1. 脚本参数配置
 # 请确保 Python 环境中已安装 pandas, numpy, tqdm 和你的 poregpt 包
-INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
-OUTPUT_FILE="step250_cal_base_patten_feature_mp13.csv"
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
+INPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
+
+OUTPUT_DIR="step250_cal_base_patten_feature"
+# 创建输出目录
+mkdir -p $OUTPUT_DIR
 MIN_REPEAT=13
-LEVELS="5 5 5 5"
+OUTPUT_FILE="${OUTPUT_DIR}/step250_cal_base_patten_feature_mp${MIN_REPEAT}.csv"
+
+LEVELS="11 11 11 11"
 
 # 2. 执行前检查
 if [ ! -f "$INPUT_FILE" ]; then
@@ -23,7 +31,7 @@ echo "参数:   min_repeat=$MIN_REPEAT, levels=$LEVELS"
 echo "------------------------------------------------"
 
 # 使用 python3 确保调用正确，也可以直接改回 python
-python3 step250_cal_base_patten_feature.py \
+python3 scripts/step250_cal_base_patten_feature.py \
     --input "$INPUT_FILE" \
     --output "$OUTPUT_FILE" \
     --min_repeat $MIN_REPEAT \

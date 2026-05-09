@@ -31,8 +31,8 @@ def get_adaptive_fonts(width, seq_len):
 
 
 
-def calculate_vector_diff(layered_tokens, win_size, win_stride):
-    RSQ_LEVELS = [5, 5, 5, 5]
+def calculate_vector_diff(layered_tokens, win_size, win_stride, levels):
+    RSQ_LEVELS = levels
     vectors = []
     tids = [] 
     
@@ -43,6 +43,10 @@ def calculate_vector_diff(layered_tokens, win_size, win_stride):
         tids.append(tid)
         v = get_rsq_vector_from_integer(tid, RSQ_LEVELS, num_quantizers=1, use_fast=True)
         # 确保 v 是 (4,) 而不是 (1, 4)
+        # vectors.append(np.array(v).flatten())
+        if hasattr(v, "cpu"):
+            v = v.cpu().numpy()
+
         vectors.append(np.array(v).flatten())
 
     vec_matrix = np.array(vectors) # 期望 shape: (n_tokens, 4)
@@ -100,9 +104,10 @@ def calculate_vector_diff(layered_tokens, win_size, win_stride):
             print("-" * 40)
             
     return np.array(time_indices), np.array(diff_values)
-def visualize_integrated_dynamics(args):
-    RSQ_LEVELS = [5, 5, 5, 5]
-    ID_PADDING = 3
+def visualize_integrated_dynamics(args, levels):
+    RSQ_LEVELS = levels
+    codebook_size = int(np.prod(RSQ_LEVELS))
+    ID_PADDING = len(str(codebook_size - 1))
     plot_range = tuple(args.range)
     view_width = plot_range[1] - plot_range[0]
 
@@ -132,7 +137,12 @@ def visualize_integrated_dynamics(args):
 
                 # --- 2. 右轴 (Latent Dynamics) ---
                 ax_twin = ax.twinx()
-                t_idx, v_diff = calculate_vector_diff(layered, args.window_size, args.window_stride)
+                t_idx, v_diff = calculate_vector_diff(
+                    layered,
+                    args.window_size,
+                    args.window_stride,
+                    RSQ_LEVELS
+                )
                 t_idx, v_diff = np.array(t_idx), np.array(v_diff)
                 mask = (t_idx >= plot_range[0]) & (t_idx <= plot_range[1])
                 
@@ -163,7 +173,8 @@ def visualize_integrated_dynamics(args):
                     tid_int = int(token_pair[0][0] if isinstance(token_pair[0], list) else token_pair[0])
                     coords = get_rsq_coords_from_integer(tid_int, RSQ_LEVELS, num_quantizers=1)
                     if isinstance(coords, list) and len(coords) == 1: coords = coords[0]
-                    coord_str = "".join(map(str, coords))
+                    # coord_str = "".join(map(str, coords))
+                    coord_str = "".join([str(x) if x != 10 else 'a' for x in coords])
                     
                     display_text = f"{str(tid_int).zfill(ID_PADDING)}:{coord_str}"
 
@@ -186,8 +197,15 @@ def visualize_integrated_dynamics(args):
                 print(f"⚠️ Skip faulty line: {e}")
                 continue
 
-    plt.suptitle(f"Nanopore Signal vs Latent Dynamics (Linear Token Alignment)\nWindow Size={args.window_size}, Stride={args.window_stride}", 
-                 fontsize=22, y=0.98, fontweight='bold')
+    # plt.suptitle(f"Nanopore Signal vs Latent Dynamics (Linear Token Alignment)\nWindow Size={args.window_size}, Stride={args.window_stride}", 
+                 #fontsize=22, y=0.98, fontweight='bold')
+    plt.suptitle(
+    f"Nanopore Signal vs Latent Dynamics (Linear Token Alignment)\n"
+    f"Window Size={args.window_size}, Stride={args.window_stride} | Levels={levels}",
+    fontsize=22,
+    y=0.98,
+    fontweight='bold'
+    )
     plt.tight_layout(rect=[0.02, 0.03, 0.98, 0.94])
     plt.savefig(args.output_file, bbox_inches='tight')
     print(f"✅ 线性可视化完成: {args.output_file}")
@@ -199,5 +217,12 @@ if __name__ == "__main__":
     parser.add_argument('-r', '--range', type=int, nargs=2, default=[0, 1000])
     parser.add_argument('--window-size', type=int, default=5)
     parser.add_argument('--window-stride', type=int, default=1)
+    parser.add_argument(
+    '--levels',
+    type=int,
+    nargs='+',
+    required=True,
+    help='RSQ levels，例如: 5 5 5 5 或 11 11 11 11'
+    )
     args = parser.parse_args()
-    visualize_integrated_dynamics(args)
+    visualize_integrated_dynamics(args, args.levels)

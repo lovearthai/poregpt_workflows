@@ -32,7 +32,7 @@ echo "📍 输出: $OUTPUT_FILE"
 echo "------------------------------------------------"
 
 # 执行 Python 脚本
-python3 step201_decode_tokens_layered.py \
+python3 scripts/step201_decode_tokens_layered.py \
     -i "$INPUT_FILE" \
     -o "$OUTPUT_FILE" \
     --model-ckpt "$MODEL_CKPT" \

@@ -37,7 +37,8 @@ def generate_full_token_vectors(levels, num_q):
             sid += val * stride
             stride *= levels[i]
 
-        coord_str = "".join(map(str, coords))
+        # coord_str = "".join(map(str, coords))
+        coord_str = "".join('a' if v == 10 else str(v) for v in coords)
         s_layer_data.append((sid, coord_str))
 
     # 2. 跨层全量组合

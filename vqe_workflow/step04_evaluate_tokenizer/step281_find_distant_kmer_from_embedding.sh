@@ -6,8 +6,8 @@
 # =================================================================
 
 # 1. 路径配置
-INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_all_block5_sigma3.csv"
-PYTHON_SCRIPT="step281_find_distant_kmer_from_embedding.py"
+INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_dynamic_topn10_block5_sigma3.csv"
+PYTHON_SCRIPT="scripts/step281_find_distant_kmer_from_embedding.py"
 
 # 2. 分析参数配置
 MIN_SAMPLES=5      # 每个 K-mer 至少出现的次数，增加此值可提高统计稳定性

@@ -1,10 +1,14 @@
 #!/bin/bash
 
 # --- 基础配置 ---
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
 # 输入数据路径
-INPUT_JSONL="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+INPUT_JSONL="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 # 模型路径
-MODEL_PATH="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_150m_DNA595G_RSQ542_C625_CNN12_V340S147000/base"
+# MODEL_PATH="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_150m_DNA595G_RSQ542_C625_CNN12_V340S147000/base"
+MODEL_PATH="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_300m_DNA595G_RSQ1142_C16k_CNN12_V342S036000L1/base"
 
 #!/bin/bash
 
@@ -38,7 +42,7 @@ echo "🖼️ 输出目录: $OUT_DIR"
 echo "----------------------------------------------------------------"
 
 # 执行 Python 脚本
-python3 step291_infer_base_pattern_from_olmo.py \
+python3 scripts/step291_infer_base_pattern_from_olmo.py \
     --input "$INPUT_JSONL" \
     --model_path "$MODEL_PATH" \
     --line_id "$LINE_ID" \

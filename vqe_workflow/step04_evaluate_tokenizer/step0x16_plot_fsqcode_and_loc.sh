@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # --- 配置 ---
-CSV_INPUT="step0x15_fsqcode_and_loc.csv"
-PNG_OUTPUT="step0x16_fsqcode_and_loc.png"
-PLOT_SCRIPT="step0x16_plot_fsqcode_and_loc.py"
+CSV_INPUT="step0x15_transform_fsqtoken_to_vector/step0x15_transform_fsqtoken_to_vector.csv"
+OUTPUT_DIR="step0x16_plot_fsqcode_and_loc"
+mkdir -p $OUTPUT_DIR
+
+PNG_OUTPUT="${OUTPUT_DIR}/step0x16_fsqcode_and_loc.png"
+PLOT_SCRIPT="scripts/step0x16_plot_fsqcode_and_loc.py"
 # 标记的点数 (建议 50-200 之间，取决于你的 UMAP 簇的紧密程度)
 LABEL_SAMPLES=120
 

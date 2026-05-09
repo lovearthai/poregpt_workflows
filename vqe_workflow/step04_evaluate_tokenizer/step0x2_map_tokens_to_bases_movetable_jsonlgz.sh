@@ -3,18 +3,20 @@
 # ==============================================================================
 # ⚙️ 配置区域
 # ==============================================================================
+# tokenizer的名字,一旦固定，为了保持后续查找一致,不要改动了
+TOKENIZER_NAME="vqe342s036000l1"
 
 # 输入文件 (上一步生成的包含 tokens_layered 的文件)
-INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.jsonl.gz"
+INPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.jsonl.gz"
 
 # 输出文件
-OUTPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+OUTPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 
 # 映射因子 (1 token = 4 signals)
 FACTOR=4
 
 # Python 脚本名称
-PYTHON_SCRIPT="step0x2_map_tokens_to_bases_movetable_jsonlgz.py"
+PYTHON_SCRIPT="scripts/step0x2_map_tokens_to_bases_movetable_jsonlgz.py"
 
 # ==============================================================================
 # 🚀 执行逻辑

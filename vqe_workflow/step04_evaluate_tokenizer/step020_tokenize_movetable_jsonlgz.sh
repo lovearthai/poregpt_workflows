@@ -4,19 +4,23 @@
 # ⚙️ 配置区域 (在此处修改参数)
 # ==============================================================================
 
+# tokenizer的名字,一旦固定，为了保持后续查找一致,不要改动了
+# MODEL_CKPT的名字也要改
+TOKENIZER_NAME="vqe342s036000l1"
+
 # 输入文件路径
-INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.jsonl.gz"
+INPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.jsonl.gz"
 
 # 输出文件路径
-OUTPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.jsonl.gz"
+OUTPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.jsonl.gz"
 
-# 模型检查点路径 (.pth 文件)
-MODEL_CKPT="/mnt/si003067jezr/default/poregpt/workflows/workflows/vqe_workflow/step02_train_vqe_model/pass340_w64_5x4x2_cnn12_dna595g_lr4e5_mongoq30_m12_scratch_f01k_lc12000/models/porepgt_vqe_tokenizer.step147000.pth"
+# 模型检查点路径, 因为我们使用accelerate框架，所以检查点路径是个目录
+MODEL_CKPT="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_300m_DNA595G_RSQ1142_C16k_CNN12_V342S036000L1/encoder"
 
 # 运行设备 (cuda 或 cpu)
 DEVICE="cuda"
 
-# token化的层
+# token化的层,这个地方必须填写0
 LAYER=0
 
 
@@ -39,7 +43,7 @@ echo "=================================================="
 
 
 # 执行 Python 脚本
-python3 step020_tokenize_movetable_jsonlgz.py \
+python3 scripts/step020_tokenize_movetable_jsonlgz.py \
     -i "$INPUT_FILE" \
     -o "$OUTPUT_FILE" \
     --model-ckpt "$MODEL_CKPT" \

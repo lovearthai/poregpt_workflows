@@ -9,6 +9,8 @@
 
 # 默认输入文件 (按顺序取最后定义的有效值，或通过命令行参数传入 $1)
 # 建议通过命令传参: ./step257_plot_bases_pattern_kde3d.sh input.csv
+INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn9_block5_sigma3.csv"
+INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block5_sigma3.csv"
 INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"
 if [ ! -z "$1" ]; then
     INPUT_CSV=$1
@@ -39,6 +41,9 @@ MAX_CATEGORIES=3
 # --- 核心修改：必须包含的碱基模式 ---
 # 配合 step260 脚本找到的距离最远的 K-mer 使用
 REQUIRED_PATTERNS="CGTCA GATAG GCTAT"
+REQUIRED_PATTERNS="ACTCA AGAGA AGCGT"
+REQUIRED_PATTERNS="CTCTA GAGAG CACGA"
+REQUIRED_PATTERNS="ACTCT TAGAG CATGA"
 
 # --- 3. 创建输出目录 ---
 mkdir -p "$OUTPUT_DIR"
@@ -66,7 +71,7 @@ echo "------------------------------------------------"
 start_time=$(date +%s)
 
 # 注意：传递参数给新的 python 脚本，包含 --num_rows 和 --point_size
-python3 step258_plot_bases_pattern_kde3d_pro.py \
+python3 scripts/step258_plot_bases_pattern_kde3d_pro.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --max_points "$MAX_POINTS" \

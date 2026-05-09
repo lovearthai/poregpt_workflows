@@ -8,8 +8,13 @@
 # --- 1. 路径与文件名配置 ---
 
 # 输入文件 (支持命令行第一个参数传入)
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn9_block5_sigma3.csv"}
 INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block5_sigma3.csv"}
-
+#INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"}
+#INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn5_block5_sigma3.csv"}
+#INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_dynamic_topn9_block5_sigma3.csv"}
+#INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_boundary_bnum1_block5_sigma3.csv"}
+#INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_all_block5_sigma3.csv"}
 # 输出目录
 OUTPUT_DIR="step253_plot_bases_pattern"
 
@@ -29,7 +34,16 @@ MAX_CATEGORIES=2
 REQUIRED_BASE_PATTERNS="CGTCA GATAG"
 REQUIRED_BASE_PATTERNS="CGTCA GATAG GCTAT TCTAC TAGAG GCTGT GATAT GTCGT"
 REQUIRED_BASE_PATTERNS="CGTCA GATAG GCTAT TAGAG"
-REQUIRED_BASE_PATTERNS="CGTCA GATAG GCTAT"
+REQUIRED_BASE_PATTERNS="CGTCA GATAG GCTAT" ## 这3个模式shift前后区分度都不是很好
+REQUIRED_BASE_PATTERNS="CTCTA GAGAG"
+REQUIRED_BASE_PATTERNS="CTCTA GAGAG CACGA"
+REQUIRED_BASE_PATTERNS="ACTCT AGAGA AGCGT"
+REQUIRED_BASE_PATTERNS="ACTCT TAGAG CATGA"
+REQUIRED_BASE_PATTERNS="AGTCG TAGAC AGACG"
+REQUIRED_BASE_PATTERNS="ACGCA GTCGT GTAGC"
+REQUIRED_BASE_PATTERNS="ACGCA TAGAC ACGCT"
+REQUIRED_BASE_PATTERNS="AGTCG TAGAC AGACG"
+REQUIRED_BASE_PATTERNS="ACGCA GTCGT GTAGC"
 
 # --- 3. 创建输出目录 ---
 mkdir -p "$OUTPUT_DIR"
@@ -68,7 +82,7 @@ echo "------------------------------------------------"
 start_time=$(date +%s)
 
 # 注意：$REQUIRED_BASE_PATTERNS 必须用双引号包裹传递，防止空格导致参数解析断开
-python3 step253_plot_bases_pattern.py \
+python3 scripts/step253_plot_bases_pattern.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --max_points $MAX_POINTS \

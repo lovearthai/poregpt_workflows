@@ -46,6 +46,16 @@ def visualize_fsq_subplots(input_path, output_path, max_reads=1000):
                 print(f"⏳ 已读取 {count} 条 Read...", end='\r')
 
     print(f"\n📊 正在生成 2x3 子图布局...")
+    
+    # 计算全局范围（所有 base 一起）
+    all_x = []
+    all_y = []
+    for base in base_list:
+        all_x.extend(data_points[base]['x'])
+        all_y.extend(data_points[base]['y'])
+
+    x_min, x_max = min(all_x), max(all_x)
+    y_min, y_max = min(all_y), max(all_y)
 
     # 创建 2x3 画布
     fig, axes = plt.subplots(2, 3, figsize=(18, 12), dpi=150)
@@ -57,19 +67,19 @@ def visualize_fsq_subplots(input_path, output_path, max_reads=1000):
         ax.scatter(data_points[base]['x'], data_points[base]['y'], 
                    c=base_colors[base], s=0.5, alpha=0.4)
         ax.set_title(f"Base: {base}", fontsize=14, fontweight='bold', color=base_colors[base])
-        ax.set_xlim(-10, 635)
-        ax.set_ylim(-10, 635)
+        ax.set_xlim(x_min - 10, x_max + 10)
+        ax.set_ylim(y_min - 10, y_max + 10)
         ax.grid(True, linestyle='--', alpha=0.3)
 
     # 6: 绘制混合全景图
     ax_all = axes[5]
     for base in base_list:
         ax_all.scatter(data_points[base]['x'], data_points[base]['y'], 
-                       c=base_colors[base], s=0.5, alpha=0.3, label=base)
+                       c=base_colors[base], s=0.3, alpha=0.25, label=base)
     
     ax_all.set_title("All Bases Mixed", fontsize=14, fontweight='bold')
-    ax_all.set_xlim(-10, 635)
-    ax_all.set_ylim(-10, 635)
+    ax_all.set_xlim(x_min - 10, x_max + 10)
+    ax_all.set_ylim(y_min - 10, y_max + 10)
     ax_all.grid(True, linestyle='--', alpha=0.3)
     # 在最后一个子图添加图例
     leg = ax_all.legend(loc='upper right', markerscale=10)

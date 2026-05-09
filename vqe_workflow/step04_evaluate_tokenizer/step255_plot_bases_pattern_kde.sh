@@ -12,7 +12,12 @@ INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_boundary1.csv"}
 INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_block5_repeat2.csv"}
 INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_boundary1_block5_repeat2.csv"}
 INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_boundary0_block5_repeat2.csv"}
-INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn5_block7_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn9_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_dynamic_topn9_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_boundary_bnum1_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_all_block5_sigma3.csv"}
 
 # 输出目录
 OUTPUT_DIR="step255_plot_bases_pattern_kde"
@@ -32,6 +37,12 @@ REQUIRED_PATTERNS="GAGAG AGAGA CTCTC"
 REQUIRED_PATTERNS="AGAGA CTCTC"
 REQUIRED_PATTERNS="CTCTC AGAGA"
 REQUIRED_PATTERNS="CGTCA GATAG GCTAT"
+REQUIRED_PATTERNS="ACTCT AGAGA AGCGT"
+REQUIRED_PATTERNS="CTCTA GAGAG CACGA"
+REQUIRED_PATTERNS="ACTCT TAGAG CATGA"
+REQUIRED_PATTERNS="AGTCG TAGAC AGACG"
+REQUIRED_PATTERNS="ACGCA GTCGT GTAGC"
+REQUIRED_PATTERNS="ACGCA TAGAC ACGCT"
 
 # --- 3. 创建输出目录 ---
 mkdir -p $OUTPUT_DIR
@@ -70,7 +81,7 @@ echo "------------------------------------------------"
 start_time=$(date +%s)
 
 # 注意：双引号引用变量以处理空格
-python3 step255_plot_bases_pattern_kde.py \
+python3 scripts/step255_plot_bases_pattern_kde.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --max_points $MAX_POINTS \

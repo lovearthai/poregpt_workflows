@@ -2,13 +2,18 @@
 
 # --- 1. 配置参数 ---
 # 输入文件 (如果运行时没传参数，默认使用 sigma3 文件)
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn9_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block5_sigma3.csv"}
 INPUT_CSV=${1:-"step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_dynamic_topn9_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_boundary_bnum1_block5_sigma3.csv"}
+INPUT_CSV=${1:-"step252_cal_bases_pattern_feature_noshift/step252_strategy_all_block5_sigma3.csv"}
 
 # 输出目录 (用于存放可能的 log 或结果，避免路径错误)
 OUTPUT_DIR="step260_find_distant_kmer5"
 
 # 脚本名称
-PY_SCRIPT="step260_find_distant_kmer5.py"
+PY_SCRIPT="scripts/step260_find_distant_kmer5.py"
 
 # --- 2. 环境检查 ---
 if [ ! -f "$INPUT_CSV" ]; then

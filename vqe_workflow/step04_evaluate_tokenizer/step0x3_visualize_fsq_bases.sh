@@ -11,7 +11,7 @@ OUTPUT_IMAGE="fsq_base_distribution.png"
 # 读取的 Read 数量 (建议先用少量数据测试，如 1000)
 NUM_READS=2000
 
-PYTHON_SCRIPT="step0x3_visualize_fsq_bases.py"
+PYTHON_SCRIPT="scripts/step0x3_visualize_fsq_bases.py"
 
 # ==============================================================================
 # 🚀 执行逻辑

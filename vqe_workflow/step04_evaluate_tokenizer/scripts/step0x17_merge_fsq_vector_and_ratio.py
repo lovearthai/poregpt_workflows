@@ -8,11 +8,15 @@ def merge_ratios(count_csv, vector_csv, output_csv):
     
     # 读取碱基占比数据 (长表)
     # id, token_id, base, count, ratio
-    df_base = pd.read_csv(count_csv)
+    # df_base = pd.read_csv(count_csv)
     
     # 读取向量与坐标数据 (主表)
     # token_id, x, y, layer0_id, layer0_code, dim0...
-    df_vec = pd.read_csv(vector_csv, dtype={'layer0_code': str})
+    # df_vec = pd.read_csv(vector_csv, dtype={'layer0_code': str})
+    
+    # 【修改 1】读取时强制将 token_id 设为字符串，消除类型差异
+    df_base = pd.read_csv(count_csv, dtype={'token_id': str, 'base': str})
+    df_vec = pd.read_csv(vector_csv, dtype={'token_id': str, 'layer0_code': str})
 
     print(f"🔄 正在进行透视变换 (Pivot)...")
     # 将 df_base 从长表转为宽表

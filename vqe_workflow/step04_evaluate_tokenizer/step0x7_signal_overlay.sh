@@ -6,7 +6,7 @@ OUTPUT_IMAGE="raw_signal_overlay_full_n10_r100_300.png"
 
 # 根据你上传的统计图：
 # 平均长度约1750，最大约2440。我们将绘图范围设为 0 到 2440。
-python3 step0x7_signal_overlay.py \
+python3 scripts/step0x7_signal_overlay.py \
     -i "$INPUT_FILE" \
     -o "$OUTPUT_IMAGE" \
     -n 10 \

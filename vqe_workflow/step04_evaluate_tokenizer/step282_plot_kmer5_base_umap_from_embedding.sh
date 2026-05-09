@@ -13,7 +13,7 @@ INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn5_bloc
 INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_boundary_bnum1_block5_sigma3.csv"
 INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_dynamic_topn5_block5_sigma3.csv"
 INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_all_block5_sigma3.csv"
-INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_boundary_bnum1_block5_sigma3.csv"
+INPUT_CSV="step280_cal_bases_pattern_feature_by_olmo/step280_strategy_dynamic_topn10_block5_sigma3.csv"
 
 if [ ! -z "$1" ]; then
     INPUT_CSV=$1
@@ -70,7 +70,7 @@ start_time=$(date +%s)
 
 # 调用 Python 脚本
 # 注意：请确保 plot_category_clustering.py 文件在当前目录或 Python 路径中
-python3 step282_plot_kmer5_base_umap_from_embedding.py \
+python3 scripts/step282_plot_kmer5_base_umap_from_embedding.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --cato_pattern "$CATO_PATTERN" \

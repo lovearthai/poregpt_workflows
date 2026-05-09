@@ -6,11 +6,14 @@
 # =================================================================
 
 # --- 1. 路径与文件名配置 ---
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
 
 # 输入文件路径
-INPUT_GZ="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+INPUT_GZ="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 # 模型路径
-MODEL_PATH="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_150m_DNA595G_RSQ542_C625_CNN12_V340S147000/base"
+# MODEL_PATH="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_150m_DNA595G_RSQ542_C625_CNN12_V340S147000/base"
+MODEL_PATH="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_300m_DNA595G_RSQ1142_C16k_CNN12_V342S036000L1/base"
 
 # 输出目录
 OUTPUT_DIR="step280_cal_bases_pattern_feature_by_olmo"
@@ -76,7 +79,7 @@ echo "输出文件:    $OUTPUT_CSV"
 echo "运行策略:    $MODE_DESC (Sigma: $WEIGHT_SIGMA)"
 echo "------------------------------------------------"
 
-python step280_cal_bases_pattern_feature_by_olmo.py \
+python scripts/step280_cal_bases_pattern_feature_by_olmo.py \
     --input "$INPUT_GZ" \
     --output "$OUTPUT_CSV" \
     --model_path "$MODEL_PATH" \

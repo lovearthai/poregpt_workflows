@@ -65,7 +65,7 @@ echo "------------------------------------------------"
 start_time=$(date +%s)
 
 # 注意：传递参数给新的 python 脚本，包含 --num_rows 和 --point_size
-python3 step257_plot_bases_pattern_kde3d.py \
+python3 scripts/step257_plot_bases_pattern_kde3d.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --max_points "$MAX_POINTS" \

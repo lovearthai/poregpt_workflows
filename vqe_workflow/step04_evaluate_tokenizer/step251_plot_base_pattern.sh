@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 1. 路径与文件名配置
-INPUT_CSV="step250_cal_base_patten_feature_mp13.csv"
+INPUT_CSV="step250_cal_base_patten_feature/step250_cal_base_patten_feature_mp13.csv"
 OUTPUT_DIR="step251_plot_base_pattern"
 METHOD="umap"  # 可选: pca, tsne, umap
 N_CLUSTERS=4
@@ -23,7 +23,7 @@ echo "输出:     $OUTPUT_PNG"
 echo "聚类数:   $N_CLUSTERS"
 echo "------------------------------------------------"
 
-python3 step251_plot_base_pattern.py \
+python3 scripts/step251_plot_base_pattern.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --n_clusters "$N_CLUSTERS" \

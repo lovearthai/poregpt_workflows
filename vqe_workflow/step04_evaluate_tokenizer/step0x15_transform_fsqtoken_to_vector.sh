@@ -2,13 +2,17 @@
 
 # --- 配置区 ---
 # FSQ 的能级配置 (levels)
-LEVELS="5 5 5 5"
+LEVELS="11 11 11 11"
 # 残差层数 (num_q)
 NUM_Q=1
+
 # 输出文件名
-OUTPUT_FILE="step0x15_transform_fsqtoken_to_vector.csv"
+OUTPUT_DIR="step0x15_transform_fsqtoken_to_vector"
+mkdir -p $OUTPUT_DIR
+
+OUTPUT_FILE="${OUTPUT_DIR}/step0x15_transform_fsqtoken_to_vector.csv"
 # Python 脚本名 (确保与你保存的 Python 文件名一致)
-PY_SCRIPT="step0x15_transform_fsqtoken_to_vector.py"
+PY_SCRIPT="scripts/step0x15_transform_fsqtoken_to_vector.py"
 
 echo "========================================================="
 echo "🚀 开始执行 ResidualFSQ 全量 Token 映射任务"

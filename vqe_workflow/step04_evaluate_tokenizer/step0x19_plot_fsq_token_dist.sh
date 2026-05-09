@@ -8,13 +8,16 @@
 # --- 1. 路径与文件名配置 ---
 
 # 输入：碱基统计文件 (由 step0x14 生成，包含 token_id, base, count)
-BASE_CSV="step0x14_count_token_base_pairs_layer.csv"  # 注意使用正确的文件名，确保与前面步骤一致
+BASE_CSV="step0x14_count_token_base_pairs_layer/step0x14_count_token_base_pairs_layer_shifted.csv"
 
 # 输入：Token 坐标与编码文件 (由 step0x15 生成，包含 x, y 坐标)
-LOC_CSV="step0x15_fsqcode_and_loc.csv" # 注意使用正确的文件名，确保与前面步骤一致
+LOC_CSV="step0x15_transform_fsqtoken_to_vector/step0x15_transform_fsqtoken_to_vector.csv" # 注意使用正确的文件名，确保与前面步骤一致
 
 # 输出：最终生成的分布散点图
-OUTPUT="step0x19_plot_fsq_token_dist.png"
+OUTPUT_DIR="step0x19_plot_fsq_token_dist"
+mkdir -p $OUTPUT_DIR
+
+OUTPUT="${OUTPUT_DIR}/step0x19_plot_fsq_token_dist.png"
 
 # --- 2. 绘图参数配置 (关键) ---
 
@@ -42,7 +45,7 @@ echo "-------------------------------------------------------"
 # --- 4. 运行 Python 绘图脚本 ---
 
 # 调用 step0x19 脚本，传入配置参数
-python3 step0x19_plot_fsq_token_dist.py \
+python3 scripts/step0x19_plot_fsq_token_dist.py \
     --base_csv "$BASE_CSV" \
     --loc_csv "$LOC_CSV" \
     --output "$OUTPUT" \

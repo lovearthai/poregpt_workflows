@@ -14,7 +14,9 @@ INPUT_CSV="step252_cal_bases_pattern_feature/step252_boundary0_block5_repeat2_si
 INPUT_CSV="step252_cal_bases_pattern_feature/step252_boundary0_block7_repeat2_sigma3.csv"
 INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block7_sigma3.csv"
 INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"
+INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn9_block5_sigma3.csv"
 INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block5_sigma3.csv"
+INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"
 
 if [ ! -z "$1" ]; then
     INPUT_CSV=$1
@@ -42,6 +44,9 @@ CATO_PATTERN="TCXCG"
 CATO_PATTERN="GTCXCGA"
 CATO_PATTERN="ATXGA"
 CATO_PATTERN="AGXAC"
+CATO_PATTERN="GTXAC"
+CATO_PATTERN="TCXAT"
+CATO_PATTERN="GCXAT"
 
 # 降维方法：可选 tsne 或 pca
 # tsne: 擅长展示局部簇（适合看 K-mer 区分度）
@@ -76,7 +81,7 @@ start_time=$(date +%s)
 
 # 调用 Python 脚本
 # 注意：请确保 plot_category_clustering.py 文件在当前目录或 Python 路径中
-python3 step270_plot_kmer5_base_umap.py \
+python3 scripts/step270_plot_kmer5_base_umap.py \
     --input "$INPUT_CSV" \
     --output "$OUTPUT_PNG" \
     --cato_pattern "$CATO_PATTERN" \

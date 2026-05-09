@@ -4,14 +4,27 @@
 # ⚙️ 配置区域
 # ==============================================================================
 
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
 # 输入文件：包含 signal, pattern, base_sample_spans_rel, tokens_layered 字段的 jsonl.gz 文件
-INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 
 # Python 脚本名称
-PYTHON_SCRIPT="step0x11_full_alignment_plot_movetable_jsonlgz.py"
+PYTHON_SCRIPT="scripts/step0x11_full_alignment_plot_movetable_jsonlgz.py"
 
 # 输出图片路径
-OUTPUT_IMAGE="step0x11_full_alignment_plot.png"
+# 所有输出统一放在一个目录
+OUT_DIR="step0x11_full_alignment_plot_movetable_jsonlgz"
+mkdir -p "$OUT_DIR"
+
+# 输出文件（带 tokenizer，避免覆盖）
+OUTPUT_IMAGE="${OUT_DIR}/step0x11_full_alignment_plot_${TOKENIZER_NAME}.png"
+
+# 支持外部覆盖输出路径
+if [ -n "$2" ]; then
+    OUTPUT_IMAGE="$2"
+fi
 
 # 可视化参数
 RANGE_START=800   # 显示区间的起始位置

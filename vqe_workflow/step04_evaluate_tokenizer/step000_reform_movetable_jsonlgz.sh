@@ -14,7 +14,7 @@ OUTPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.reformed.jsonl.gz"
 PRECISION=1
 
 # Python 脚本名称
-PYTHON_SCRIPT="step000_reform_movetable_jsonlgz.py"
+PYTHON_SCRIPT="scripts/step000_reform_movetable_jsonlgz.py"
 
 # ==============================================================================
 # 🚀 执行逻辑

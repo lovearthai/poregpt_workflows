@@ -20,7 +20,7 @@ if [[ -n "$DEBUG_FLAG" ]]; then
 fi
 
 # 执行 Python 脚本
-python step17_tokenid_to_fsqcode.py \
+python scripts/step17_tokenid_to_fsqcode.py \
     --input-csv "$INPUT_CSV" \
     --output-csv "$OUTPUT_CSV" \
     --codebook-fsqd $CODEBOOK_FSQD \

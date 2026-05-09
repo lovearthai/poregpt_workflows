@@ -20,11 +20,12 @@ def get_adaptive_fonts(width, seq_len):
         'label': 13 * min(w_scale, 1.1),
     }
 
-def calculate_vector_diff(layered_tokens, win_size, win_stride):
+def calculate_vector_diff(layered_tokens, win_size, win_stride, levels):
     if not layered_tokens or len(layered_tokens) < win_size:
         return np.array([]), np.array([])
 
-    RSQ_LEVELS = [5, 5, 5, 5]
+    # RSQ_LEVELS = [5, 5, 5, 5]
+    RSQ_LEVELS = levels
     vectors = []
     for tp in layered_tokens:
         raw_tid = tp[0]
@@ -52,7 +53,8 @@ def calculate_vector_diff(layered_tokens, win_size, win_stride):
 
 
 def visualize_integrated_dynamics_bak(args):
-    RSQ_LEVELS = [5, 5, 5, 5]
+    # RSQ_LEVELS = [5, 5, 5, 5]
+    RSQ_LEVELS = args.levels
     ID_PADDING = 3
 
     target_data = None
@@ -192,8 +194,11 @@ def visualize_integrated_dynamics_bak(args):
 
 
 def visualize_integrated_dynamics(args):
-    RSQ_LEVELS = [5, 5, 5, 5]
-    ID_PADDING = 3
+    # RSQ_LEVELS = [5, 5, 5, 5]
+    RSQ_LEVELS = args.levels
+    # ID_PADDING = 3
+    codebook_size = int(np.prod(RSQ_LEVELS))
+    ID_PADDING = len(str(codebook_size - 1))
     # 按照你的要求，设定固定的 Y 轴范围
     Y_MIN_FIXED = -3
     Y_MAX_FIXED = 3
@@ -275,7 +280,7 @@ def visualize_integrated_dynamics(args):
 
         # B. 动力学 (右轴) - 独立缩放不受信号 ylim 影响
         ax_twin = ax.twinx()
-        t_idx_rel, v_diff = calculate_vector_diff(sub_layered, args.window_size, args.window_stride)
+        t_idx_rel, v_diff = calculate_vector_diff(sub_layered, args.window_size, args.window_stride, args.levels)
         if len(v_diff) > 0:
             t_plot = (t_idx_rel + t_start) * args.signal_stride
             ax_twin.bar(t_plot, v_diff, width=args.signal_stride*0.8, color='purple', alpha=0.05, clip_on=False)
@@ -302,7 +307,8 @@ def visualize_integrated_dynamics(args):
             t_mid = (t_start + j) * args.signal_stride + (args.signal_stride / 2)
             tid = int(np.array(tp[0]).flatten()[0])
             coords = get_rsq_coords_from_integer(tid, RSQ_LEVELS, num_quantizers=1)
-            coord_str = "".join(map(str, coords[0] if isinstance(coords[0], list) else coords))
+            # coord_str = "".join(map(str, coords[0] if isinstance(coords[0], list) else coords))
+            coord_str = "".join([str(x) if x < 10 else chr(ord('a') + x - 10) for x in coords])
 
             ax.text(t_mid, token_y_outside, f"{str(tid).zfill(ID_PADDING)}:{coord_str}",
                     fontsize=fs['token'], rotation=90, ha='center', va='top',
@@ -332,5 +338,11 @@ if __name__ == "__main__":
     parser.add_argument('--signal-stride', type=int, default=4)
     parser.add_argument('--window-size', type=int, default=1)
     parser.add_argument('--window-stride', type=int, default=1)
+    parser.add_argument(
+    '--levels',
+    type=int,
+    nargs='+',
+    required=True
+    )
     args = parser.parse_args()
     visualize_integrated_dynamics(args)

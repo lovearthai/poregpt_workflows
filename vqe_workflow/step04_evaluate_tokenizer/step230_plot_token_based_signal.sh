@@ -4,19 +4,24 @@
 # 脚本名称: step230_plot_token_based_signal.sh
 # 脚本用途: 封装 Nanopore 信号 Token 叠加绘图脚本 (支持多层 ID 计算)
 # 使用方法: ./step230_plot_token_based_signal.sh [TOKEN] [LAYER] [STRIDE] [INPUT_GZ]
+# 注意事项：该脚本需要在运行step0x14_count_token_base_pairs_total 或 step0x14_count_token_base_pairs_layer 步骤之后，确定与token配对的碱基信息后使用  
 # =================================================================
+
+# tokenizer的名字,一旦固定，为了保持后续查找一致,不要改动了
+TOKENIZER_NAME="vqe342s036000l1"
 
 # --- 1. 参数配置区 ---
 # 调整了参数顺序，方便常用修改
-TOKEN=${1:-254336}       # 目标 Token ID (可以是单层 ID 或拼接后的 uni_id)
-LAYER=${2:-0}         # 模式：0 使用 tokens 字段, >0 使用 tokens_layered 拼接前 N 层
+TOKEN=${1:-7320}       # 目标 Token ID (可以是单层 ID 或拼接后的 uni_id)
+LAYER=${2:-1}         # 模式：0 使用 tokens 字段, >0 使用 tokens_layered 拼接前 N 层
 STRIDE=${3:-4}        # 步长因子
-INPUT_FILE=${4:-"/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"}
+INPUT_FILE=${4:-"/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"}
 
 # 其他内部变量
-CB_SIZE=512           # Codebook 大小 (计算多层 uni_id 时使用)
+# CB_SIZE=512           # Codebook 大小 (计算多层 uni_id 时使用)
+CB_SIZE=14641
 OUT_DIR="step230_plot_token_based_signal"
-MAX_LINES=150
+MAX_LINES=10
 ALPHA=0.15
 
 # --- 2. 目录准备 ---
@@ -40,10 +45,10 @@ echo "输入文件    : $INPUT_FILE"
 echo "保存路径    : $OUT_NAME"
 echo "-------------------------------------------------------"
 
-python3 step230_plot_token_based_signal.py \
+python3 scripts/step230_plot_token_based_signal.py \
     --input "$INPUT_FILE" \
     --target_token "$TOKEN" \
-    --target_base "G" \
+    --target_base "C" \
     --layer "$LAYER" \
     --codebook_size "$CB_SIZE" \
     --stride_factor "$STRIDE" \

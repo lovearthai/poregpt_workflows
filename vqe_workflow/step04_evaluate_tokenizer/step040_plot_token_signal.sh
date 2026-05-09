@@ -6,16 +6,22 @@
 # 使用方法: ./run.sh [TOKEN] [LAYER] [STRIDE] [INPUT_GZ]
 # =================================================================
 
+# 本脚本证明：单token表达出来的波形不是确定的，弱一致，有微弱的特征
+
+# tokenizer的名字,一旦固定，为了保持后续查找一致,不要改动了
+TOKENIZER_NAME="vqe342s036000l1"
+
 # --- 1. 参数配置区 ---
-TOKEN=${1:-348130}       # 目标 Token ID
+TOKEN=${1:-7320}       # 目标 Token ID
 LAYER=${2:-1}         # 0: tokens字段, >0: 拼接模式
 STRIDE=${3:-4}        # 步长因子 (纳米孔模型通常为 4 或 5)
-INPUT_FILE=${4:-"/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"}
+INPUT_FILE=${4:-"/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"}
 
 # 其他硬编码参数
-CB_SIZE=625           # 计算 uni_id 时的码本大小
+# CODEBOOK_SIZE=625           # 计算 uni_id 时的码本大小
+CODEBOOK_SIZE=14641
 OUT_DIR="step040_plot_token_signal"
-MAX_LINES=10000         # 叠加线条数，不看碱基建议多设一点（如 200）
+MAX_LINES=10         # 叠加线条数，不看碱基建议多设一点（如 200）
 ALPHA=0.1             # 透明度，线条多时调低一点效果更好
 
 # --- 2. 环境准备 ---
@@ -36,11 +42,11 @@ echo "📂 输入文件  : $INPUT_FILE"
 echo "🖼️ 保存路径  : $OUT_NAME"
 echo "-------------------------------------------------------"
 
-python3 step040_plot_token_signal.py \
+python3 scripts/step040_plot_token_signal.py \
     --input "$INPUT_FILE" \
     --target_token "$TOKEN" \
     --layer "$LAYER" \
-    --codebook_size "$CB_SIZE" \
+    --codebook_size "$CODEBOOK_SIZE" \
     --stride_factor "$STRIDE" \
     --output "$OUT_NAME" \
     --max_plot_lines "$MAX_LINES" \

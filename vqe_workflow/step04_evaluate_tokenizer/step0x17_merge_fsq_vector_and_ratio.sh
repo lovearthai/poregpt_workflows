@@ -6,10 +6,14 @@
 # ==============================================================================
 
 # --- 配置区 ---
-readonly COUNT_FILE="step0x14_count_token_base_pairs_layer.csv"
-readonly VEC_FILE="step0x15_transform_fsqtoken_to_vector.csv"
-readonly OUTPUT_FILE="step0x17_token_vector_with_ratio.csv"
-readonly WORKER="step0x17_merge_fsq_vector_and_ratio.py"
+readonly COUNT_FILE="step0x14_count_token_base_pairs_layer/step0x14_count_token_base_pairs_layer_shifted.csv"
+readonly VEC_FILE="step0x15_transform_fsqtoken_to_vector/step0x15_transform_fsqtoken_to_vector.csv"
+
+OUTPUT_DIR="step0x17_merge_fsq_vector_and_ratio"
+mkdir -p $OUTPUT_DIR
+readonly OUTPUT_FILE="${OUTPUT_DIR}/step0x17_token_vector_with_ratio.csv"
+
+readonly WORKER="scripts/step0x17_merge_fsq_vector_and_ratio.py"
 
 echo "[$(date +'%H:%M:%S')] INFO: Starting data merge pipeline..."
 

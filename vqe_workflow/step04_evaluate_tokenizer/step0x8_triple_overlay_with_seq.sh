@@ -6,7 +6,7 @@ OUTPUT_IMAGE="raw_signal_single_subplots.png"
 
 # 执行脚本
 # 根据你的统计，单行最大长度约 2440
-python3 step0x8_triple_overlay_with_seq.py \
+python3 scripts/step0x8_triple_overlay_with_seq.py \
     -i "$INPUT_FILE" \
     -o "$OUTPUT_IMAGE" \
     -r 0 1000

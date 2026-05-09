@@ -33,8 +33,17 @@ def process_mapping(input_path, output_path, factor):
                 base_idx = 0
                 num_bases = len(seq)
                 
+                # ===== 新增：计算有效 token 范围 =====
+                # max_signal = spans[-1][1]          # 最后一个 base 覆盖到的 signal 终点
+                # max_token_idx = max_signal // factor
+                
+                 # ===== ✅ debug 就放在这里 =====
+                # if len(tokens) != max_token_idx:
+                    # print(f"⚠ 截断: tokens={len(tokens)}, 有效={max_token_idx}")
+                
                 # 遍历每个 token
                 for i in range(len(tokens)):
+                # for i in range(min(len(tokens), max_token_idx)):
                     # 当前 token 对应的信号区间 [t_start, t_end)
                     t_start = i * factor
                     t_end = (i + 1) * factor

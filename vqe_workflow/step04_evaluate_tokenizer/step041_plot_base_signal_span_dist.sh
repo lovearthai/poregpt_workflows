@@ -5,7 +5,10 @@
 # source activate bonito_py310
 
 # --- 路径配置 ---
-INPUT_JSONL="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
+INPUT_JSONL="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 OUTPUT_DIR="step041_plot_base_signal_span_dist"
 OUTPUT_PNG="${OUTPUT_DIR}/base_signal_span_distribution.png"
 
@@ -21,7 +24,7 @@ echo "----------------------------------------------------------------"
 
 # 执行 Python 脚本
 # 假设脚本接受 -i/--input 和 -o/--output 参数
-python step041_plot_base_signal_span_dist.py \
+python scripts/step041_plot_base_signal_span_dist.py \
     --input "${INPUT_JSONL}" \
     --output "${OUTPUT_PNG}"
 

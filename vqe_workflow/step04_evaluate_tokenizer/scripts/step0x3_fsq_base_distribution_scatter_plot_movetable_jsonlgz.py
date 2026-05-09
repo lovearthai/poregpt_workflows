@@ -53,10 +53,13 @@ def visualize_fsq_latent_space(input_path, output_path, max_reads=1000):
     # 使用 scatter 绘图
     # s 是点的大小，alpha 是透明度（高密度场景建议设小一点）
     scatter = plt.scatter(x_coords, y_coords, c=z_values, cmap=cmap, s=1, alpha=0.5)
-    
-    # 设置坐标轴范围 (FSQ 范围是 0-625)
-    plt.xlim(-10, 635)
-    plt.ylim(-10, 635)
+        
+    # 自动适配FSQ码表空间坐标范围
+    x_min, x_max = min(x_coords), max(x_coords)
+    y_min, y_max = min(y_coords), max(y_coords)
+
+    plt.xlim(x_min - 10, x_max + 10)
+    plt.ylim(y_min - 10, y_max + 10)
     
     # 添加图例
     cbar = plt.colorbar(scatter, ticks=[0.4, 1.2, 2.0, 2.8, 3.6])

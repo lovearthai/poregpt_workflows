@@ -7,11 +7,15 @@
 
 # --- 1. 路径与文件名配置 ---
 
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
 # 输入文件路径
-INPUT_GZ="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+INPUT_GZ="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
+INPUT_GZ="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 
 # 输出目录
-OUTPUT_DIR="step252_cal_bases_pattern_feature"
+OUTPUT_DIR="step252_cal_bases_pattern_feature_noshift"
 
 # --- 2. 核心模式配置 ---
 
@@ -38,7 +42,7 @@ MIN_REPEAT=2           # 每个碱基块的最小重复次数
 WEIGHT_SIGMA=3
 
 # --- 3. 码本相关参数 ---
-LEVELS="5 5 5 5"
+LEVELS="11 11 11 11"
 NUM_QUANTIZERS=1
 
 # --- 4. 动态生成输出文件名 ---
@@ -69,7 +73,7 @@ echo "运行策略:   $MODE_DESC"
 echo "码本层级:   $LEVELS"
 echo "------------------------------------------------"
 
-python3 step252_cal_bases_pattern_feature.py \
+python3 scripts/step252_cal_bases_pattern_feature.py \
     --input "$INPUT_GZ" \
     --output "$OUTPUT_CSV" \
     --levels $LEVELS \

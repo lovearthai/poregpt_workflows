@@ -8,7 +8,9 @@
 # --- 1. 路径与文件名配置 ---
 
 # 默认输入文件
+INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_dynamic_topn9_block5_sigma3.csv"
 INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_boundary_bnum1_block5_sigma3.csv"
+INPUT_CSV="step252_cal_bases_pattern_feature/step252_strategy_all_block5_sigma3.csv"
 if [ ! -z "$1" ]; then
     INPUT_CSV=$1
 fi
@@ -43,7 +45,7 @@ echo "------------------------------------------------"
 start_time=$(date +%s)
 
 # 构建基础命令
-CMD="python3 step271_find_most_distant_kmer5.py -i $INPUT_CSV --min_samples $MIN_SAMPLES --top_n $TOP_N"
+CMD="python3 scripts/step271_find_most_distant_kmer5.py -i $INPUT_CSV --min_samples $MIN_SAMPLES --top_n $TOP_N"
 
 # 根据配置添加对称参数
 if [ "$SYMMETRIC_MODE" = true ] ; then

@@ -6,9 +6,12 @@
 # =================================================================
 
 # --- 配置区 ---
-BASE_CSV="step0x14_count_token_base_pairs_layer.csv"
-LOC_CSV="step0x15_fsqcode_and_loc.csv"
-OUTPUT="step0x18_plot_fsq_token_subplot.png"
+BASE_CSV="step0x14_count_token_base_pairs_layer/step0x14_count_token_base_pairs_layer_shifted.csv"
+LOC_CSV="step0x15_transform_fsqtoken_to_vector/step0x15_transform_fsqtoken_to_vector.csv"
+
+OUTPUT_DIR="step0x18_plot_fsq_token_dist"
+mkdir -p $OUTPUT_DIR
+OUTPUT="${OUTPUT_DIR}/step0x18_plot_fsq_token_shifted_subplot.png"
 
 # 采样与放大参数
 TOP_PERCENT=0.2
@@ -23,7 +26,7 @@ echo "⚙️  配置: Top $TOP_PERCENT | Power $POWER_VAL"
 echo "-------------------------------------------------------"
 
 # --- 执行 ---
-python3 step0x18_plot_fsq_token_dist.py \
+python3 scripts/step0x18_plot_fsq_token_dist.py \
     --base_csv "$BASE_CSV" \
     --loc_csv "$LOC_CSV" \
     --output "$OUTPUT" \

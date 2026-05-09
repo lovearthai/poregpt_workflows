@@ -11,7 +11,7 @@ OUTPUT_IMAGE="fsq_base_subplots_2x3.png"
 # 读取的 Read 数量 (子图模式建议多读一点数据，例如 3000-5000)
 NUM_READS=3000
 
-PYTHON_SCRIPT="step0x4_visualize_fsq_subplots.py"
+PYTHON_SCRIPT="scripts/step0x4_visualize_fsq_subplots.py"
 
 # ==============================================================================
 # 🚀 执行逻辑

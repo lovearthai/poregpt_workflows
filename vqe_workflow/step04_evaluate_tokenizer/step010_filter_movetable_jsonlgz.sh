@@ -5,10 +5,11 @@
 # ==============================================================================
 
 # 输入文件路径
-INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.reformed.jsonl.gz"
-
+# INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.reformed.jsonl.gz"
+INPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.reformed.shiftr4.jsonl.gz"
 # 输出文件路径
-OUTPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.jsonl.gz"
+# OUTPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.jsonl.gz"
+OUTPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.jsonl.gz"
 
 # 信号截断阈值 (对应 Python 脚本的 --clip-value)
 CLIP_VALUE=3.0
@@ -17,7 +18,7 @@ CLIP_VALUE=3.0
 PROCESS_STRATEGY="mongo"
 
 # Python 脚本名称 (确保该文件在当前目录存在)
-PYTHON_SCRIPT="step010_filter_movetable_jsonlgz.py"
+PYTHON_SCRIPT="scripts/step010_filter_movetable_jsonlgz.py"
 
 # ==============================================================================
 # 🚀 执行逻辑 (下方代码通常无需修改)

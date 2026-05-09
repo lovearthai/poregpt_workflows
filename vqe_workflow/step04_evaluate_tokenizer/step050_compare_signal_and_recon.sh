@@ -5,10 +5,11 @@
 # ==============================================================================
 
 # 输入的 JSONL.GZ 文件
-INPUT_JSONL="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.jsonl.gz"
+INPUT_JSONL="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.jsonl.gz"
 
 # 模型检查点路径
-MODEL_CKPT="/mnt/si003067jezr/default/poregpt/workflows/workflows/vqe_workflow/step02_train_vqe_model/pass340_w64_5x4x2_cnn12_dna595g_lr4e5_mongoq30_m12_scratch_f01k_lc12000/models/porepgt_vqe_tokenizer.step147000.pth"
+# MODEL_CKPT="/mnt/si003067jezr/default/poregpt/workflows/workflows/vqe_workflow/step02_train_vqe_model/pass340_w64_5x4x2_cnn12_dna595g_lr4e5_mongoq30_m12_scratch_f01k_lc12000/models/porepgt_vqe_tokenizer.step147000.pth"
+MODEL_CKPT="/mnt/zzbnew/rnamodel/model/signalDNAmodel/HF_300m_DNA595G_RSQ1142_C16k_CNN12_V342S036000L1/encoder"
 
 # 绘图输出根目录
 EVAL_ROOT_DIR="step050_compare_signal_and_recon"
@@ -35,7 +36,7 @@ echo "🖼️ 保存目录 : $OUTPUT_DIR"
 echo "🔢 样本总数 : $MAX_PLOTS"
 echo "=================================================="
 
-python3 step050_compare_signal_and_recon.py \
+python3 scripts/step050_compare_signal_and_recon.py \
     -i "$INPUT_JSONL" \
     -o "$OUTPUT_DIR" \
     --model-ckpt "$MODEL_CKPT" \

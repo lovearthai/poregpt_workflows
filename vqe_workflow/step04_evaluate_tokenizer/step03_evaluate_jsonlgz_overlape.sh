@@ -11,7 +11,7 @@ INPUT_FILE="signal_none_mongoq30_tokenized_l1.jsonl.gz"
 NGRAM_SIZE=3
 
 # Python 脚本名称
-PYTHON_SCRIPT="step03_evaluate_jsonlgz_overlape.py"
+PYTHON_SCRIPT="scripts/step03_evaluate_jsonlgz_overlape.py"
 
 # ==============================================================================
 # 🚀 执行逻辑

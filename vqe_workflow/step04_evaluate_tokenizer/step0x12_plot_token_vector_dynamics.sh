@@ -7,7 +7,11 @@
 
 # --- 1. 路径配置 ---
 # 默认输入文件 (根据你的项目结构调整)
-INPUT_GZ=${1:-"/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"}
+
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
+INPUT_GZ=${1:-"/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"}
 OUTPUT_DIR="step0x12_plot_token_vector_dynamics"
 mkdir -p $OUTPUT_DIR
 
@@ -25,6 +29,9 @@ WIN_STRIDE=1
 PLOT_START=800
 PLOT_END=1200
 
+# 🔥 RSQ levels（新增）
+LEVELS="11 11 11 11"
+
 # --- 3. 生成输出文件名 ---
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 TAG="sz${WIN_SIZE}_st${WIN_STRIDE}"
@@ -37,18 +44,20 @@ echo "🚀 开始执行隐空间动力学联合分析"
 echo "时间:       $(date)"
 echo "输入文件:   $INPUT_GZ"
 echo "窗口配置:   Size=$WIN_SIZE, Stride=$WIN_STRIDE"
+echo "RSQ Levels: $LEVELS"
 echo "显示范围:   $PLOT_START 到 $PLOT_END"
 echo "------------------------------------------------"
 
 # 统计执行耗时
 start_time=$(date +%s)
 
-python3 step0x12_plot_token_vector_dynamics.py \
+python3 scripts/step0x12_plot_token_vector_dynamics.py \
     --input-file "$INPUT_GZ" \
     --output-file "$OUTPUT_PNG" \
     --range $PLOT_START $PLOT_END \
     --window-size $WIN_SIZE \
-    --window-stride $WIN_STRIDE
+    --window-stride $WIN_STRIDE \
+    --levels $LEVELS
 
 # --- 5. 检查结果 ---
 

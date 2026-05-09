@@ -6,12 +6,12 @@ import argparse
 from collections import Counter
 from tqdm import tqdm
 
-def process_token_counts(input_path, output_path):
+def process_token_counts(input_path, output_path, layer):
     # 使用 Counter 存储 token_id 的频次
     token_counts = Counter()
     total_count = 0  # 用于记录总 token 数以计算 ratio
 
-    print(f"📖 正在读取并统计: {input_path}")
+    print(f"📖 正在读取并统计: {input_path} (Layer: {layer})")
 
     try:
         with gzip.open(input_path, 'rt', encoding='utf-8') as f:
@@ -19,8 +19,14 @@ def process_token_counts(input_path, output_path):
                 try:
                     data = json.loads(line.strip())
                     
-                    # 直接获取 tokens 字段
-                    tokens = data.get('tokens', [])
+                    # 根据 layer 选择字段
+                    if layer == 0:
+                        # 统计 tokens 字段（一维列表）
+                        tokens = data.get('tokens', [])
+                    else:
+                        # 统计 tokens_layered 的指定层 (1 对应索引 0)
+                        layered_data = data.get('tokens_layered', [])
+                        tokens = layered_data[layer - 1] if len(layered_data) >= layer else []
 
                     # 只统计 token_id，不再与 base 配对
                     for t_id in tokens:
@@ -60,6 +66,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='统计 tokens 字段的频次分布并计算占比')
     parser.add_argument('-i', '--input', type=str, required=True, help='输入的 jsonl.gz 文件')
     parser.add_argument('-o', '--output', type=str, required=True, help='输出的 CSV 文件')
-
+# 添加下面这一行
+    parser.add_argument('--layer', type=int, default=0, help='统计哪一层级 (0: tokens, 1+: tokens_layered)')
     args = parser.parse_args()
-    process_token_counts(args.input, args.output)
+    process_token_counts(args.input, args.output, args.layer)

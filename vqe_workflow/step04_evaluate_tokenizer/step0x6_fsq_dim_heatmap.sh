@@ -3,7 +3,7 @@
 # 配置路径
 INPUT_FILE="/home/jiaoshuai/step04_evaluate_tokenizer/signal_none_mongoq30_tokenized_pair_based.jsonl.gz"
 OUTPUT_IMAGE="fsq_dimension_feature_map.png"
-PYTHON_SCRIPT="step0x6_fsq_dim_heatmap.py"
+PYTHON_SCRIPT="scripts/step0x6_fsq_dim_heatmap.py"
 
 # 数据读取量建议
 # 对于统计热图，10000条记录左右能得到非常稳定的分布

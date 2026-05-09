@@ -4,18 +4,29 @@
 # ⚙️ 配置区域
 # ==============================================================================
 
+# 🔥 tokenizer 控制
+TOKENIZER_NAME="vqe342s036000l1"
+
 # 输入文件：包含 signal, pattern, base_sample_spans_rel, tokens_layered 字段的 jsonl.gz 文件
-INPUT_FILE="/mnt/zzbnew/dnadata/movetable/signal_LB06.mongoq30.vqe340s147000.aligned.jsonl.gz"
+INPUT_FILE="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 
 # Python 脚本名称
-PYTHON_SCRIPT="step0x11_rsq_full_alignment_movetable_jsonlgz.py"
+PYTHON_SCRIPT="scripts/step0x11_rsq_full_alignment_movetable_jsonlgz.py"
 
 # 输出图片路径
-OUTPUT_IMAGE="step0x11_rsq_full_alignment_plot.png"
+# 所有输出统一放在一个目录
+OUT_DIR="step0x11_rsq_full_alignment_movetable_jsonlgz"
+mkdir -p "$OUT_DIR"
+
+# 输出文件（带 tokenizer，避免覆盖）
+OUTPUT_IMAGE="${OUT_DIR}/step0x11_rsq_full_alignment_plot_${TOKENIZER_NAME}.png"
 
 # 可视化参数
 RANGE_START=1000   # 显示区间的起始位置
 RANGE_END=1200     # 显示区间的结束位置
+
+# 🔥 FSQ 参数（唯一新增）
+LEVELS="11 11 11 11"
 
 # ==============================================================================
 # 🚀 脚本功能说明
@@ -50,7 +61,8 @@ fi
 python3 "$PYTHON_SCRIPT" \
     -i "$INPUT_FILE" \
     -o "$OUTPUT_IMAGE" \
-    -r "$RANGE_START" "$RANGE_END"
+    -r "${RANGE_START}" "${RANGE_END}" \
+    --levels ${LEVELS}
 
 if [ $? -eq 0 ]; then
     echo -e "\n✅ 可视化任务成功结束！"
