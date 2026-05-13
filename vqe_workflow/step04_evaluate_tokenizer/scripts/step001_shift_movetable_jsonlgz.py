@@ -41,7 +41,10 @@ def main():
             try:
                 data = json.loads(line)
                 read_id = data.get("read_id", "unknown")
-                pattern = data.get("pattern", "")
+                #pattern = data.get("pattern", "")
+                pattern_bc = data.get("pattern_bc", "")
+                pattern_ref = data.get("pattern_ref", "")
+                modification_positions = data.get("modification_positions", [])
                 spans = data.get("base_sample_spans_rel", [])
                 signal = data.get("signal", [])
 
@@ -50,7 +53,9 @@ def main():
                 if shift < 0:
                     # 【左移逻辑】
                     s = abs(shift)
-                    new_pattern = pattern[s:]
+                    #new_pattern = pattern[s:]
+                    new_pattern_bc = pattern_bc[s:]
+                    new_pattern_ref = pattern_ref[s:]
                     new_spans = spans[:-s] if s > 0 else spans
                     
                     if not new_spans: continue
@@ -58,11 +63,19 @@ def main():
                     # C. 信号裁剪：根据新的最后一个 Span 的结束坐标裁剪信号
                     last_coord = new_spans[-1][1]
                     new_signal = signal[:last_coord]
+                    
+                    new_modification_positions = [
+                        p - s
+                        for p in modification_positions
+                        if p >= s
+                    ]
 
                 elif shift > 0:
                     # 【右移逻辑】
                     s = shift
-                    new_pattern = pattern[:-s]
+                    # new_pattern = pattern[:-s]
+                    new_pattern_bc = pattern_bc[:-s]
+                    new_pattern_ref = pattern_ref[:-s]
                     new_spans = spans[s:]
                     
                     if not new_spans: continue
@@ -75,15 +88,27 @@ def main():
                     # 获取新信号并根据最后一个 span 裁剪尾部
                     last_coord = new_spans[-1][1]
                     new_signal = signal[offset : offset + last_coord]
+                    
+                    new_length = len(new_pattern_ref)
+
+                    new_modification_positions = [
+                        p
+                        for p in modification_positions
+                        if p < new_length
+                    ]
                 
                 else:
                     # 【不移动】
-                    new_pattern = pattern
+                    #new_pattern = pattern
+                    new_pattern_bc = pattern_bc
+                    new_pattern_ref = pattern_ref
                     new_spans = spans
                     new_signal = signal
+                    new_modification_positions = modification_positions
 
                 # 基础合法性检查
-                if not new_pattern or not new_spans:
+                #if not new_pattern or not new_spans:
+                if not new_pattern_bc or not new_pattern_ref or not new_spans:
                     sys.exit(f"\n[ERROR] 行 {line_idx}: 位移量 {shift} 导致数据为空。Read ID: {read_id}")
 
                 # --- 严格验证逻辑 (一旦失败立刻终止) ---
@@ -91,13 +116,22 @@ def main():
                 last_coord = new_spans[-1][1]
 
                 # 验证 1: pattern 字符数必须等于 spans 列表项数
-                if len(new_pattern) != len(new_spans):
+                #if len(new_pattern) != len(new_spans):
+                if len(new_pattern_bc) != len(new_spans):    
                     error_msg = (
                         f"\n[CRITICAL ERROR] 验证失败(1): 碱基数与Span数不一致！\n"
                         f"Read ID: {read_id} (行: {line_idx})\n"
-                        f"Pattern长度: {len(new_pattern)}, Spans项数: {len(new_spans)}"
+                        f"Pattern长度: {len(new_pattern_bc)}, Spans项数: {len(new_spans)}"
                     )
                     sys.exit(error_msg)
+                    
+                if len(new_pattern_ref) != len(new_spans):    
+                    error_msg = (
+                        f"\n[CRITICAL ERROR] 验证失败(1): 碱基数与Span数不一致！\n"
+                        f"Read ID: {read_id} (行: {line_idx})\n"
+                        f"Pattern长度: {len(new_pattern_ref)}, Spans项数: {len(new_spans)}"
+                    )
+                    sys.exit(error_msg)    
 
                 # 验证 2: 最后一个 span 的结束坐标必须等于裁剪后信号的实际长度
                 if last_coord != len(new_signal):
@@ -107,9 +141,31 @@ def main():
                         f"最后坐标: {last_coord}, 裁剪后信号长度: {len(new_signal)}"
                     )
                     sys.exit(error_msg)
+                
+                # modofication_positions 验证: 所有位置必须在 pattern_ref 范围内且指向修饰碱基    
+                for pos in new_modification_positions:
+
+                    if pos < 0 or pos >= len(new_pattern_ref):
+                        sys.exit(
+                            f"\n[CRITICAL ERROR] modification_positions 越界！\n"
+                            f"Read ID: {read_id} (行: {line_idx})\n"
+                            f"非法位置: {pos}"
+                        )
+
+                    base = new_pattern_ref[pos]
+
+                    if base.upper() in {"A", "T", "C", "G"}:
+                        sys.exit(
+                            f"\n[CRITICAL ERROR] modification_positions 指向普通碱基！\n"
+                            f"Read ID: {read_id} (行: {line_idx})\n"
+                            f"位置: {pos}, 碱基: {base}"
+                        )
 
                 # 更新数据字典
-                data["pattern"] = new_pattern
+                #data["pattern"] = new_pattern
+                data["pattern_bc"] = new_pattern_bc
+                data["pattern_ref"] = new_pattern_ref
+                data["modification_positions"] = new_modification_positions
                 data["base_sample_spans_rel"] = new_spans
                 data["signal"] = new_signal
                 data["shift"] = args.shift

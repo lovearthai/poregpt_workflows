@@ -25,7 +25,7 @@ def process_mapping(input_path, output_path, factor):
             
             # 提取必要字段
             tokens = data.get('tokens', [])
-            seq = data.get('pattern', "")
+            seq = data.get('pattern_ref', "")
             spans = data.get('base_sample_spans_rel', [])
             
             if tokens and seq and spans:

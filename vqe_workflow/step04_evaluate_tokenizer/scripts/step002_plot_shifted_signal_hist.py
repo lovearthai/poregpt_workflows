@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 
 BASES = "ACGT"
 
-
 BASE_ORDER = "ATGC"
 PANEL_ORDER = "GACT"
 COLORS = {
@@ -49,7 +48,8 @@ def iter_records(path: str, max_reads: Optional[int] = None) -> Iterator[Record]
             if not line.strip():
                 continue
             obj = json.loads(line)
-            pattern = obj.get("pattern")
+            # 使用 pattern_ref（参考序列）而不是已过期的 pattern 字段
+            pattern = obj.get("pattern_ref") or obj.get("pattern")
             spans = obj.get("base_sample_spans_rel")
             signal = obj.get("signal")
             if not isinstance(pattern, str) or not isinstance(spans, list) or not isinstance(signal, list):
@@ -98,32 +98,52 @@ def output_stem(path: str) -> str:
     return input_name
 
 
-def collect_base_means(path: str) -> Dict[str, List[float]]:
+def collect_base_means(path: str, trim: int = 0) -> Dict[str, List[float]]:
     values: Dict[str, List[float]] = defaultdict(list)
     for record in iter_records(path):
         prefix = build_prefix(record.signal)
         for base, (start, end) in zip(record.pattern, record.spans):
-            if base not in BASES or end <= start:
+            if base not in BASES:
                 continue
-            values[base].append(segment_mean(prefix, start, end))
+            
+            # 按照 .sh 的要求添加 trim 逻辑
+            trimmed_start = start + trim
+            trimmed_end = end - trim
+            
+            if trimmed_end <= trimmed_start:
+                continue
+                
+            values[base].append(segment_mean(prefix, trimmed_start, trimmed_end))
     return values
 
 
-def plot_histogram(values: Dict[str, List[float]], output_path: str, dataset_label: str, bins: int, alpha: float) -> None:
+def plot_histogram(
+    values: Dict[str, List[float]], 
+    output_path: str, 
+    dataset_label: str, 
+    bins: int, 
+    alpha: float,
+    xmin_opt: Optional[float] = None,
+    xmax_opt: Optional[float] = None
+) -> None:
     pooled: List[float] = []
     for base in BASE_ORDER:
         pooled.extend(values[base])
     if not pooled:
         raise RuntimeError("No base-level signal means collected.")
 
-    xmin = min(pooled)
-    xmax = max(pooled)
-    if xmin == xmax:
-        xmin -= 1.0
-        xmax += 1.0
-    pad = 0.03 * (xmax - xmin)
-    xmin -= pad
-    xmax += pad
+    # 如果外部传入了 xmin 和 xmax，则使用外部指定的限制；否则自动推导
+    if xmin_opt is not None and xmax_opt is not None:
+        xmin, xmax = xmin_opt, xmax_opt
+    else:
+        xmin = min(pooled)
+        xmax = max(pooled)
+        if xmin == xmax:
+            xmin -= 1.0
+            xmax += 1.0
+        pad = 0.03 * (xmax - xmin)
+        xmin -= pad
+        xmax += pad
 
     fig = plt.figure(figsize=(16, 13), dpi=160, constrained_layout=True)
     grid = fig.add_gridspec(4, 2, width_ratios=[1.55, 1.0], wspace=0.18, hspace=0.12)
@@ -148,6 +168,10 @@ def plot_histogram(values: Dict[str, List[float]], output_path: str, dataset_lab
     for row, base in enumerate(PANEL_ORDER):
         ax = fig.add_subplot(grid[row, 1])
         base_values = values[base]
+        
+        # 过滤在指定绘图区间内的数据以准确计算单面板的 mean 
+        display_values = [v for v in base_values if xmin <= v <= xmax] if base_values else []
+        
         ax.hist(
             base_values,
             bins=bins,
@@ -158,7 +182,7 @@ def plot_histogram(values: Dict[str, List[float]], output_path: str, dataset_lab
         )
         ax.set_xlim(xmin, xmax)
         ax.grid(alpha=0.15, linewidth=0.6)
-        mean_text = f"{sum(base_values) / len(base_values):.3f}" if base_values else "NA"
+        mean_text = f"{sum(display_values) / len(display_values):.3f}" if display_values else "NA"
         ax.set_title(f"{dataset_label}  {base} only  mean={mean_text}  n={len(base_values)}")
         ax.set_ylabel("Freq")
         if row == len(PANEL_ORDER) - 1:
@@ -178,11 +202,17 @@ def main() -> None:
     )
     parser.add_argument(
         "--output-dir",
-        default="/mnt/si003067jezr/default/dengyiting/workflow",
+        default="step002_plot_shifted_hist",
         help="Output directory used when --output is not provided.",
     )
     parser.add_argument("--bins", type=int, default=120, help="Histogram bin count.")
     parser.add_argument("--alpha", type=float, default=0.35, help="Overlay histogram transparency.")
+    
+    # 新增以下三个脚本指定的参数
+    parser.add_argument("--trim", type=int, default=0, help="Number of points to trim from each end of a base span.")
+    parser.add_argument("--xmin", type=float, default=None, help="Minimum X-axis value for histogram.")
+    parser.add_argument("--xmax", type=float, default=None, help="Maximum X-axis value for histogram.")
+    
     args = parser.parse_args()
 
     if not os.path.isfile(args.input):
@@ -196,8 +226,13 @@ def main() -> None:
         output_path = os.path.join(output_dir, f"{output_stem(args.input)}.hist.png")
 
     os.makedirs(output_dir, exist_ok=True)
-    values = collect_base_means(args.input)
-    plot_histogram(values, output_path, output_stem(args.input), args.bins, args.alpha)
+    
+    # 传入 trim 参数
+    values = collect_base_means(args.input, trim=args.trim)
+    
+    # 传入 xmin 和 xmax 参数
+    plot_histogram(values, output_path, output_stem(args.input), args.bins, args.alpha, 
+                   xmin_opt=args.xmin, xmax_opt=args.xmax)
 
     print(f"input={args.input}")
     print(f"wrote_plot={output_path}")

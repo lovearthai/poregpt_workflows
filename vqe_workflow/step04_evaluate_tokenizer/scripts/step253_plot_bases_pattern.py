@@ -21,7 +21,7 @@ def plot_distinct_colors(args):
         df = df.sample(n=args.max_points, random_state=42)
 
     # --- 修改部分：从 feature 字段提取特征矩阵 ---
-    if 'feature' not in df.columns:
+    if 'feature_all' not in df.columns:
         print("错误: CSV中缺少 'feature' 列")
         return
 
@@ -30,7 +30,7 @@ def plot_distinct_colors(args):
     try:
         features = np.array([
             [float(x) for x in f_str.split('_')] 
-            for f_str in df['feature']
+            for f_str in df['feature_all']
         ])
     except Exception as e:
         print(f"解析特征出错: {e}")
@@ -44,7 +44,7 @@ def plot_distinct_colors(args):
     df['x'], df['y'] = embedding[:, 0], embedding[:, 1]
 
     # 4. 核心逻辑：类别筛选与排序
-    all_categories = sorted(df['category'].unique().tolist())
+    all_categories = sorted(df['kmer_seq'].unique().tolist())
     print(f"原始数据中共有 {len(all_categories)} 个类别。")
 
     required_cats = []
@@ -68,18 +68,18 @@ def plot_distinct_colors(args):
         remaining_cats = sorted([c for c in all_categories if c not in required_cats])
         final_categories = required_cats + remaining_cats
 
-    df = df[df['category'].isin(final_categories)]
+    df = df[df['kmer_seq'].isin(final_categories)]
     print(f"最终绘制类别数: {len(final_categories)}，总点数: {len(df)}")
 
     # 5. 配色策略
     distinct_cmap = plt.get_cmap('Set1')
-    category_colors = {}
+    kmer_seq_colors = {}
     for i, cat in enumerate(final_categories):
         if i < 9:
-            category_colors[cat] = distinct_cmap(i)
+            kmer_seq_colors[cat] = distinct_cmap(i)
         else:
             base_color = plt.get_cmap('tab20')(i % 20)
-            category_colors[cat] = (base_color[0], base_color[1], base_color[2], 0.3)
+            kmer_seq_colors[cat] = (base_color[0], base_color[1], base_color[2], 0.3)
 
     # 6. 绘图展示
     fig, ax = plt.subplots(1, 1, figsize=(16, 10), dpi=150)
@@ -88,15 +88,15 @@ def plot_distinct_colors(args):
     print(f"正在绘制散点图...")
     # 先画背景类 (9 以后)
     for cat in final_categories[9:]:
-        mask = df['category'] == cat
+        mask = df['kmer_seq'] == cat
         ax.scatter(df.loc[mask, 'x'], df.loc[mask, 'y'],
-                    label=cat, color=category_colors[cat], s=15, edgecolors='none')
+                    label=cat, color=kmer_seq_colors[cat], s=15, edgecolors='none')
 
     # 再画核心类 (前 9 个)
     for cat in final_categories[:9]:
-        mask = df['category'] == cat
+        mask = df['kmer_seq'] == cat
         ax.scatter(df.loc[mask, 'x'], df.loc[mask, 'y'],
-                    label=cat, color=category_colors[cat], s=50, alpha=0.7, edgecolors='none')
+                    label=cat, color=kmer_seq_colors[cat], s=50, alpha=0.7, edgecolors='none')
 
     ax.set_title(f"UMAP Pattern Visualization (SSEM Feature)\n{info_str}", fontsize=15)
     ax.set_xlabel("UMAP_1", fontsize=12)

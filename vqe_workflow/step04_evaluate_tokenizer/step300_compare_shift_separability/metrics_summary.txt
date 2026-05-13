@@ -1,0 +1,3 @@
+        dataset  intra_class_distance  inter_class_distance  separation_ratio  silhouette_score
+0  before_shift              0.312594              0.156147          0.499522         -0.387798
+1   after_shift              0.238751              0.240202          1.006075         -0.292574
