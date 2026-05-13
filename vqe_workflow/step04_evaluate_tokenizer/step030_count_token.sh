@@ -11,8 +11,10 @@
 
 # tokenizer的名字,一旦固定，为了保持后续查找一致,不要改动了
 TOKENIZER_NAME="vqe342s036000l1"
+TOKENIZER_NAME="vqe340s147000l1"
 
-DEFAULT_INPUT="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
+DEFAULT_INPUT="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.mongoq30.${TOKENIZER_NAME}.jsonl.gz"
+DEFAULT_INPUT="/mnt/zzbnew/poregpt/dnadata/movetable/signal_LB06.modified.reformed.shiftr4.mongoq30.${TOKENIZER_NAME}.aligned.jsonl.gz"
 INPUT_FILE=${1:-$DEFAULT_INPUT}
 
 # 获取不带路径的文件名作为前缀，方便区分不同的数据集
