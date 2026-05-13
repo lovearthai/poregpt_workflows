@@ -31,13 +31,12 @@ echo "最终执行参数 LEVELS='$LEVELS'"
 # 输入文件路径
 
 # 输出目录
-OUTPUT_DIR="step252_cal_bases_pattern_feature"
 mkdir -p $OUTPUT_DIR
 
 # --- 4. 核心模式与参数配置 ---
 
 # [滑动窗口配置]
-KMER_K=5               # 滑动窗口 K-mer 长度 (代替原来的 BLOCK_COUNT)
+KMER_K=7               # 滑动窗口 K-mer 长度 (代替原来的 BLOCK_COUNT)
 
 # [策略: boundary] 专用配置
 # 对应 Python 中的 --boundary_num (首尾碱基各取几个 Token)
@@ -59,6 +58,7 @@ INPUT_GZ="/mnt/zzbnew/poregpt/dnadata/movetable/signal_${FILE_PATTERN}.modified.
 
 # --- 5. 动态生成输出文件名 ---
 # 由于一次运行同时包含三种策略结果，统一输出到一个 CSV 文件中
+OUTPUT_DIR="/mnt/zzbnew/poregpt/dnadata/movetable"
 OUTPUT_CSV="$OUTPUT_DIR/step252_${FILE_PATTERN}.modified.reformed.shiftr4.mongoq30.${TOKENIZER_NAME}_kmer${KMER_K}_bnum${BOUNDARY_NUM}_topn${DYNAMIC_TOP_N}_sigma${WEIGHT_SIGMA}.csv"
 
 

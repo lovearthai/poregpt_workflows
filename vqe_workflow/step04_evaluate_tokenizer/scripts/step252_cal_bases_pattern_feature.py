@@ -13,7 +13,7 @@ def calculate_statistics(input_file, kmer_k):
     total_bases = 0
     total_kmers = 0
     valid_rows = 0
-    
+
     print(f"正在预统计数据集特征... ({input_file})")
     with gzip.open(input_file, 'rt') as f:
         for line in f:
@@ -21,20 +21,20 @@ def calculate_statistics(input_file, kmer_k):
                 record = json.loads(line)
                 pattern_ref = record.get('pattern_ref', '')
                 spans = record.get('base_sample_spans_rel', [])
-                
+
                 if len(pattern_ref) != len(spans) or len(pattern_ref) == 0:
                     continue
-                
+
                 N = len(pattern_ref)
                 total_bases += N
                 valid_rows += 1
-                
+
                 if N >= kmer_k:
                     total_kmers += (N - kmer_k + 1)
-                    
+
             except Exception:
                 continue
-                
+
     print("----------------- 统计报告 -----------------")
     print(f"有效数据行数 (Valid Rows): {valid_rows}")
     print(f"总碱基长度 (Total Reference Bases): {total_bases} bp")
@@ -76,7 +76,7 @@ def select_boundary_tokens_kmer(spans, layer0_ids, boundary_num, stride):
 
         # 1. 严格按时间顺序提取该碱基的头部 boundary_num 个 Token 索引
         head_indices = list(range(span_start, min(span_start + boundary_num, span_end)))
-        
+
         # 2. 严格按时间顺序提取该碱基的尾部 boundary_num 个 Token 索引
         tail_indices = list(range(max(span_start, span_end - boundary_num), span_end))
 
@@ -135,7 +135,7 @@ def compute_gaussian_weighted_feature(selected_tokens, vector_map, sigma):
 def process_nanopore_data(args):
     # 先行执行全局统计
     calculate_statistics(args.input, args.kmer_k)
-    
+
     vector_map = generate_vector_map(args.levels, args.num_quantizers)
     final_data = []
     global_id = 0
@@ -157,6 +157,10 @@ def process_nanopore_data(args):
                 pattern_ref = record['pattern_ref']
                 layer0_ids = [t[0] for t in record['tokens_layered']]
                 spans = record['base_sample_spans_rel']
+
+                # === 新增功能：安全提取原始一维信号数据 ===
+                raw_signal_list = record.get('signal', [])
+                # ========================================
 
                 # --- 1. 基础长度校验 ---
                 if len(pattern_ref) != len(spans):
@@ -188,7 +192,7 @@ def process_nanopore_data(args):
 
                     # 提取映射后的 Token 列表
                     full_token_ids = layer0_ids[pattern_start : pattern_end]
-                    
+
                     # --- 3. 确保提取出的 Token 不为空 ---
                     if not full_token_ids:
                         skip_reasons["empty_tokens"] += 1
@@ -208,6 +212,22 @@ def process_nanopore_data(args):
                     tokens_boundary = select_boundary_tokens_kmer(kmer_spans, layer0_ids, args.boundary_num, stride)
                     feature_boundary = compute_gaussian_weighted_feature(tokens_boundary, vector_map, args.weight_sigma)
 
+                    # === 新增功能：根据 kmer_spans 提取信号并格式化为无逗号歧义的自定义字符串 ===
+                    signal_str = ""
+                    if raw_signal_list:
+                        segments_list = []
+                        for span in kmer_spans:
+                            sig_start = span[0]
+                            sig_end = span[1]
+                            # 截取该 span 对应的原始点，并安全防护越界
+                            segment = raw_signal_list[sig_start:sig_end]
+                            # 将当前片段里的数字转化为字符串，并用下划线 '_' 粘合
+                            seg_str = "_".join(map(str, segment))
+                            segments_list.append(seg_str)
+                        # 将各个片段用竖线 '|' 串联，完美规避 CSV 逗号解析bug
+                        signal_str = "|".join(segments_list)
+                    # ===================================================================
+
                     # 组织输出数据
                     row = {
                         'id': global_id,
@@ -217,7 +237,10 @@ def process_nanopore_data(args):
                         'tokens_bnd': "-".join(map(str, tokens_boundary)),
                         'feature_all': feature_all,
                         'feature_dyn': feature_dynamic,
-                        'feature_bnd': feature_boundary
+                        'feature_bnd': feature_boundary,
+                        # === 新增功能：在最终输出的每行中注册新的无歧义的 signal 字段 ===
+                        'signal': signal_str
+                        # ==========================================================
                     }
                     final_data.append(row)
                     global_id += 1
@@ -244,7 +267,7 @@ def main():
     parser.add_argument('--input', type=str, required=True)
     parser.add_argument('--output', type=str, default='output_features.csv')
     parser.add_argument('--kmer_k', type=int, default=5, help='滑动窗口 K-mer 的长度')
-    
+
     # 🔥 新增参数：token_stride
     parser.add_argument('--token_stride', type=int, default=4, help='Token 对应的 Stride 下采样步长')
 
