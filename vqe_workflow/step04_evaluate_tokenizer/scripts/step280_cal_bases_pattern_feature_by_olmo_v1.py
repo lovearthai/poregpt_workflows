@@ -77,9 +77,11 @@ def get_full_row_embeddings(model, tokenizer, high_layer_ids, vocab_code_shift):
 # 参考 step252 的 select_boundary_tokens_kmer 逻辑
 def select_boundary_tokens_embeddings(
     kmer_spans,
-    full_embeddings,
+    window_embeddings,
     boundary_num,
-    stride
+    stride,
+    pattern_start,
+    pattern_end
 ):
     """
     针对 K-mer 窗口的边界提取逻辑
@@ -93,20 +95,21 @@ def select_boundary_tokens_embeddings(
 
     for span in kmer_spans:
 
-        span_start = span[0] // stride
-        span_end = span[1] // stride
+        span_start = max(span[0] // stride, pattern_start)
+        span_end = min(span[1] // stride, pattern_end)
+        local_start = span_start - pattern_start
+        local_end = span_end - pattern_start
 
-        if span_start >= span_end:
+        if local_start >= local_end:
             continue
 
         head_indices = list(range(
-            span_start,
-            min(span_start + boundary_num, span_end)
+            local_start,
+            min(local_start + boundary_num, local_end)
         ))
-
         tail_indices = list(range(
-            max(span_start, span_end - boundary_num),
-            span_end
+            max(local_start, local_end - boundary_num),
+            local_end
         ))
 
         combined_indices.extend(head_indices)
@@ -119,9 +122,9 @@ def select_boundary_tokens_embeddings(
 
     for idx in combined_indices:
 
-        if idx < len(full_embeddings):
+        if 0 <= idx < len(window_embeddings):
 
-            selected_vecs.append(full_embeddings[idx])
+            selected_vecs.append(window_embeddings[idx])
 
             valid_indices.append(idx)
 
@@ -234,18 +237,23 @@ def process_nanopore_data(args):
                     
                     # 策略2: boundary
                     #vecs_boundary = select_boundary_tokens_embeddings(kmer_spans, full_row_embeddings, args.boundary_num, stride)
-                    bnd_indices_global, vecs_boundary = \
+                    bnd_indices_local, vecs_boundary = \
                         select_boundary_tokens_embeddings(
                             kmer_spans,
-                            full_row_embeddings,
+                            window_full_vecs,
                             args.boundary_num,
-                            stride
+                            stride,
+                            pattern_start,
+                            pattern_end
                     )
-                    
+                    bnd_indices_global = [
+                        pattern_start + idx
+                        for idx in bnd_indices_local
+                    ]
                     tokens_boundary = [
                         high_layer_ids[idx]
                         for idx in bnd_indices_global
-                    ]        
+                    ]       
                     
                     mean_boundary = compute_weighted_feature(vecs_boundary, args.weight_sigma)
                     feature_boundary = "_".join([f"{v:.6f}" for v in mean_boundary]) if len(mean_boundary) > 0 else ""
