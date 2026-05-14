@@ -36,7 +36,7 @@ mkdir -p $OUTPUT_DIR
 # --- 4. 核心模式与参数配置 ---
 
 # [滑动窗口配置]
-KMER_K=7               # 滑动窗口 K-mer 长度 (代替原来的 BLOCK_COUNT)
+KMER_K=9               # 滑动窗口 K-mer 长度 (代替原来的 BLOCK_COUNT)
 
 # [策略: boundary] 专用配置
 # 对应 Python 中的 --boundary_num (首尾碱基各取几个 Token)
