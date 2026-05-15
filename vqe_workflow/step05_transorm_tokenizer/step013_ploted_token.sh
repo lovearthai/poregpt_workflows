@@ -1,14 +1,17 @@
 #!/bin/bash
 
-# ================= 配置区域 =================
-# 默认输入文件
-DEFAULT_INPUT="token_counts.csv"
-# 默认输出图片
-DEFAULT_OUTPUT="token_distribution.png"
 # 默认绘制数量 (0 表示全部)
-DEFAULT_TOP_N=40
+DEFAULT_TOP_N=300
+# ================= 配置区域 =================
+DEFAULT_INPUT="step012_count_repeated_token_20260515_215237.csv"
+DEFAULT_OUTPUT="step012_count_repeated_token_p${DEFAULT_TOP_N}_20260515_215237.png"
+# 默认输入文件
+DEFAULT_INPUT="step012_count_delta1_token_20260515_204732.csv"
+DEFAULT_OUTPUT="step012_count_delta1_token_p${DEFAULT_TOP_N}_20260515_204732.png"
+
+
 # Python 脚本名称
-PY_SCRIPT="plot_tokens.py"
+PY_SCRIPT="scripts/step013_ploted_token.py"
 # ============================================
 
 # 检查 Python 脚本是否存在
@@ -29,7 +32,7 @@ fi
 INPUT_CSV=${1:-$DEFAULT_INPUT}
 TOP_N=${2:-$DEFAULT_TOP_N}
 OUTPUT_PNG=${3:-$DEFAULT_OUTPUT}
-
+TOKENS_PER_ROW=100       # 每行 50 个，最终会生成 3 行 subplot
 echo "🚀 开始绘制图表..."
 echo "--------------------------------"
 echo "输入文件: $INPUT_CSV"
@@ -38,7 +41,7 @@ echo "输出文件: $OUTPUT_PNG"
 echo "--------------------------------"
 
 # 运行 Python 脚本
-python3 "$PY_SCRIPT" --input "$INPUT_CSV" --top_n "$TOP_N" --output "$OUTPUT_PNG"
+python3 "$PY_SCRIPT" --input "$INPUT_CSV" --top_n "$TOP_N" --output "$OUTPUT_PNG" --plot_tokens_per_row "$TOKENS_PER_ROW"
 
 if [ $? -eq 0 ]; then
     echo "✨ 大功告成！"

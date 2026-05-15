@@ -5,13 +5,13 @@
 INPUT_DIR="/mnt/si003067jezr/default/poregpt/dataset/human_dna_595g/memap_mongoq30/jsonlgz_vqe340s147000l1_split1536_overlap256"
 
 # 输出目录 (修改了后缀名以区分旧的 repeated 压缩)
-OUTPUT_DIR="/mnt/si003067jezr/default/poregpt/dataset/human_dna_595g/memap_mongoq30/jsonlgz_vqe340s147000l1_split1536_overlap256_delta"
+OUTPUT_DIR="/mnt/si003067jezr/default/poregpt/dataset/human_dna_595g/memap_mongoq30/jsonlgz_vqe340s147000l1_split1536_overlap256_delta1"
 
 # 原始量化级别 (用空格分隔，对应代码中的 --levels)
 LEVELS="5 5 5 5"
 
 # 并行工作进程数 (建议设置为 CPU 核心数，0 表示自动检测)
-NUM_WORKERS=32
+NUM_WORKERS=64
 
 # 日志输出文件
 LOG_FILE="logs/step012_delta1_token.log"
