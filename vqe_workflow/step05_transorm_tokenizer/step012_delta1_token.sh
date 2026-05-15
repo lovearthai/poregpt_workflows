@@ -5,7 +5,7 @@
 INPUT_DIR="/mnt/si003067jezr/default/poregpt/dataset/human_dna_595g/memap_mongoq30/jsonlgz_vqe340s147000l1_split1536_overlap256"
 
 # 输出目录 (修改了后缀名以区分旧的 repeated 压缩)
-OUTPUT_DIR="/mnt/si003067jezr/default/poregpt/dataset/human_dna_595g/memap_mongoq30/jsonlgz_vqe340s147000l1_split1536_overlap256_delta0ed"
+OUTPUT_DIR="/mnt/si003067jezr/default/poregpt/dataset/human_dna_595g/memap_mongoq30/jsonlgz_vqe340s147000l1_split1536_overlap256_delta"
 
 # 原始量化级别 (用空格分隔，对应代码中的 --levels)
 LEVELS="5 5 5 5"
@@ -14,10 +14,10 @@ LEVELS="5 5 5 5"
 NUM_WORKERS=32
 
 # 日志输出文件
-LOG_FILE="logs/step012_delta_token.log"
+LOG_FILE="logs/step012_delta1_token.log"
 
 # Python 脚本路径 (请确保该路径与你保存新 Python 代码的文件名一致)
-PYTHON_SCRIPT="scripts/step012_delta0_token.py"
+PYTHON_SCRIPT="scripts/step012_delta1_token.py"
 # ==========================================
 
 # 自动创建输出目录
